@@ -1,0 +1,14 @@
+<div class="carousel-container">
+  <img [src]="images[currentIndex]" class="carousel-image" alt="carousel image" />
+
+  <button class="nav-button prev" (click)="prevImage()">❮</button>
+  <button class="nav-button next" (click)="nextImage()">❯</button>
+
+  <div class="dots">
+    <span
+      *ngFor="let img of images; let i = index"
+      [class.active]="i === currentIndex"
+      (click)="goToImage(i)"
+    ></span>
+  </div>
+</div>

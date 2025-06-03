@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Navbar } from '../navbar/navbar';
 import { ProductList } from '../product-list/product-list';
+import { Carousel } from '../carousel/carousel';
 
 @Component({
   selector: 'app-home-page',
-  imports: [CommonModule, FormsModule, RouterModule, Navbar, ProductList],
+  imports: [CommonModule, FormsModule, RouterModule, Navbar, ProductList, Carousel],
   standalone: true,
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.scss']
