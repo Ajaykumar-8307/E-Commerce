@@ -26,6 +26,8 @@ export class LoginPage {
       {
         next: (res: any) => {
           this.message = res.message;
+          console.log('Login successful', res);
+          localStorage.setItem('token', res.token);
         },
         error: (error) => {
           this.message = error.error.message;
