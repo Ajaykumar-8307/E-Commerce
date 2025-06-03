@@ -1,0 +1,27 @@
+<div class="navbar-container">
+    <div class="nav-logo">
+        <a href=""><h1>AJ</h1></a>
+    </div>
+    <div class="login-btn">
+      <div class="nav-search">
+        <span class="material-icons-outlined">search</span>
+        <input type="text" placeholder="Search for products">
+      </div>
+      <div class="options">
+        <span class="material-icons-outlined">shopping_bag</span>
+        <i class="fa-regular fa-heart"></i>
+        <span class="material-icons-outlined">notifications</span>
+      </div>
+      <!--Search User Info-->
+      <div class="user-info" *ngIf="user">
+        <i class="fa-regular fa-circle-user"></i>
+        <span class="user-name">Ajay</span>
+      </div>
+      <!--Login Button-->
+      <button *ngIf="!user">Log In</button>
+      <!--For Logout Function-->
+      <div *ngIf="user" class="logout">
+        <button ><i class="fa-solid fa-arrow-right-from-bracket"></i>Log Out</button>
+      </div>
+    </div>
+</div>

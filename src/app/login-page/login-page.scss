@@ -1,0 +1,117 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f1f4f9;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+.cancel-btn{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  border: none;
+  cursor: pointer;
+}
+.cancel-btn button {
+  color: white;
+  background: #3f87ff;
+  padding: 5px 12px;
+  border-radius: 0px 8px 0px 8px;
+}
+.cancel-btn button:hover {
+  background: #2e6eda;
+}
+.login-card {
+  background: #fff;
+  padding: 35px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  animation: fadeIn 0.5s ease;
+  position: relative;
+}
+
+.login-card h2 {
+  margin-bottom: 25px;
+  text-align: center;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  border-color: #3f87ff;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #3f87ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover:not([disabled]) {
+  background-color: #2e6eda;
+}
+
+button:disabled {
+  background-color: #a6c8ff;
+  cursor: not-allowed;
+}
+
+.signup-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.signup-link a {
+  color: #3f87ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

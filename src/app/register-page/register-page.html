@@ -1,0 +1,34 @@
+<div class="register-page">
+  <div class="register-container">
+    <div class="register-image">
+      <h1>Welcome!</h1>
+      <p>Create your account and get started</p>
+    </div>
+    <div class="register-form">
+      <h2>Register</h2>
+      <form>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required placeholder="Enter your name" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required formcontrolName="email" placeholder="Enter your email" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required placeholder="Enter your password" />
+        </div>
+        <div class="account-type">
+          <div class="role_user"><input type="radio" name="role" [value]='false' />User</div>
+          <div class="role_admin"><input type="radio" name="role" [value]="true" /> Admin</div>
+        </div><br><br>
+
+        <button type="submit" >Sign Up</button>
+      </form>
+      <p class="message">message</p>
+    </div>
+  </div>
+</div>

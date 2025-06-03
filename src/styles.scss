@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+*{
+    padding: 0px;
+    margin: 0px;
+    font-family: Poppins;
+    text-decoration: none;
+}
+::-webkit-scrollbar{
+    display: none;
+}
+body{
+    padding-bottom: 50px;
+}
+/* src/styles.css */
+.material-symbols-outlined {
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 48;
+  }
+  
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

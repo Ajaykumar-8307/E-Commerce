@@ -1,0 +1,152 @@
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #e0ecff, #f8f9ff);
+    font-family: "Segoe UI", sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .register-container {
+    display: flex;
+    max-width: 900px;
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    animation: fadeIn 0.8s ease;
+  }
+  
+  .register-image {
+    flex: 1;
+    background: linear-gradient(to bottom right, #3f87ff, #8763ff);
+    color: #fff;
+    padding: 50px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .register-image h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  .register-image p {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  
+  .register-form {
+    flex: 1;
+    padding: 40px 30px;
+  }
+  
+  .register-form h2 {
+    margin-bottom: 25px;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #3f87ff;
+  }
+  
+  button {
+    width: 100%;
+    padding: 14px;
+    background: #3f87ff;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover:not([disabled]) {
+    background: #326edb;
+  }
+  
+  button:disabled {
+    background: #b8d0ff;
+    cursor: not-allowed;
+  }
+
+  .account-type{
+    display: flex;
+    margin-top: 20px;
+    gap: 30px;
+  }
+  .account-type input{
+    width: 20px;
+  }
+
+  .role_user, .role_admin{
+    margin: 0px 12px 0px 0px;
+    align-items: center;
+    display: flex;
+    gap: 10px;
+  }
+  .role_user input, .role_admin input {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .message {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 500;
+    color: #2f8f2f;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .register-container {
+      flex-direction: column;
+    }
+  
+    .register-image {
+      padding: 30px 20px;
+    }
+  
+    .register-form {
+      padding: 30px 20px;
+    }
+  }
+  
