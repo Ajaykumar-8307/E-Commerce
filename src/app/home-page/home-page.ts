@@ -8,6 +8,7 @@ import { ProductList } from '../product-list/product-list';
 @Component({
   selector: 'app-home-page',
   imports: [CommonModule, FormsModule, RouterModule, Navbar, ProductList],
+  standalone: true,
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.scss']
 })

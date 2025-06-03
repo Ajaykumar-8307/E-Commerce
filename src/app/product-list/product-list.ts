@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-product-list',
   imports: [CommonModule, FormsModule, RouterModule],
+  standalone: true,
   templateUrl: './product-list.html',
   styleUrls: ['./product-list.scss']
 })

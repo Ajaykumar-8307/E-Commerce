@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-navbar',
   imports: [CommonModule, FormsModule, RouterModule],
+  standalone: true,
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss'],
   encapsulation: ViewEncapsulation.None
