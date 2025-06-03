@@ -15,11 +15,9 @@
       <button type="submit">Login</button>
     </form>
 
-    <p *ngIf="message" class="message">{{message}}</p>
-
     <p class="signup-link">
       Don't have an account? 
-      <a routerLink="/register">Sign up</a>
+      <a (click)="navigateToRegister()">Sign up</a>
     </p>
   </div>
 </div>

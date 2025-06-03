@@ -13,7 +13,6 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class LoginPage {
 
-  message: string = '';
   Api_URL = 'http://localhost:3000/api/v1/user/login';
   user = {
     email: '',
@@ -43,5 +42,8 @@ export class LoginPage {
         }
       }
     );
+  }
+  navigateToRegister() {
+    this.router.navigate(['/register']);
   }
 }
