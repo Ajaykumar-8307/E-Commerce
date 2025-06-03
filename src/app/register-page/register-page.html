@@ -9,26 +9,26 @@
       <form>
         <div class="form-group">
           <label for="name">Name</label>
-          <input type="text" id="name" name="name" required placeholder="Enter your name" />
+          <input type="text" id="name" name="name" required placeholder="Enter your name" [(ngModel)]="user.name"/>
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" required formcontrolName="email" placeholder="Enter your email" />
+          <input type="email" id="email" name="email" required formcontrolName="email" placeholder="Enter your email" [(ngModel)]="user.email"/>
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" required placeholder="Enter your password" />
+          <input type="password" id="password" name="password" required placeholder="Enter your password" [(ngModel)]="user.password"/>
         </div>
         <div class="account-type">
           <div class="role_user"><input type="radio" name="role" [value]='false' />User</div>
           <div class="role_admin"><input type="radio" name="role" [value]="true" /> Admin</div>
         </div><br><br>
 
-        <button type="submit" >Sign Up</button>
+        <button type="submit" (click)="submit()">Sign Up</button>
       </form>
-      <p class="message">message</p>
+      <p class="message">{{ message }}</p>
     </div>
   </div>
 </div>
