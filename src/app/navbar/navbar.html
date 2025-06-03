@@ -18,7 +18,7 @@
         <span class="user-name">Ajay</span>
       </div>
       <!--Login Button-->
-      <button *ngIf="!user">Log In</button>
+      <button *ngIf="!user" routerLink="/login">Log In</button>
       <!--For Logout Function-->
       <div *ngIf="user" class="logout">
         <button ><i class="fa-solid fa-arrow-right-from-bracket"></i>Log Out</button>
