@@ -22,8 +22,8 @@
           <input type="password" id="password" name="password" required placeholder="Enter your password" [(ngModel)]="user.password"/>
         </div>
         <div class="account-type">
-          <div class="role_user"><input type="radio" name="role" [value]='false' />User</div>
-          <div class="role_admin"><input type="radio" name="role" [value]="true" /> Admin</div>
+          <div class="role_user"><input type="radio" name="role" [value]='false' [(ngModel)]="user.isAdmin" />User</div>
+          <div class="role_admin"><input type="radio" name="role" [value]="true" [(ngModel)]="user.isAdmin" /> Admin</div>
         </div><br><br>
 
         <button type="submit" (click)="submit()">Sign Up</button>

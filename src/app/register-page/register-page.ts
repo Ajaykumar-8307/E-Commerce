@@ -18,7 +18,8 @@ export class RegisterPage {
   user = {
     name: '',
     email: '',
-    password: ''
+    password: '',
+    isAdmin: false
   };
   Api_URL = 'http://localhost:3000/api/v1/user/register';
   message: string = '';
@@ -29,11 +30,8 @@ export class RegisterPage {
       next: (res: any) => {
         alert('Registration successful');
         console.log('Registration successful', res);
-        localStorage.setItem('token', res.token);
-        const decodedToken: any = jwtDecode(res.token);
-        localStorage.setItem('admin', decodedToken.isAdmin);
         setTimeout(() => {
-          this.router.navigate(['/']);
+          this.router.navigate(['/login']);
         }, 1000);
       },
       error: (error: any) => {

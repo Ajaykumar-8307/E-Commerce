@@ -27,8 +27,7 @@ exports.registerUser = async (req, res) => {
         const otp = otpGen.generate(6, { upperCase: false, specialChars: false, alphabets: false });
         const otpData = await Otp.create({email, otp});
         await sendOtp.sendOtp(email, otp);
-        const token = generateToken(user);
-        return res.status(200).json({message: "User Registered successfully!", token});
+        return res.status(200).json({message: "User Registered successfully!"});
     } catch (error) {
         return res.status(500).json({message: "Error Registering User. Try again later."});
     }
@@ -44,7 +43,10 @@ exports.verifyOtp = async (req, res) => {
         const user = await User.findOne({email});
         await User.updateOne({ email }, { $set: { verified: true } });
         await Otp.deleteMany({ email });
-        return res.status(200).json({message: "OTP Verified Successfully!"});
+        // Generate a new token for the user after verification
+        const userT = await User.findOne({ email });
+        const token = generateToken(userT);
+        return res.status(200).json({message: "OTP Verified Successfully!", token});
     }catch (error) {
         return res.status(500).json({message: "Error Verifying OTP. Try Again Later."});
     }
