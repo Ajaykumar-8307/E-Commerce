@@ -93,3 +93,18 @@
 .dots span.active {
   background-color: white;
 }
+
+
+
+@media (max-width: 768px) {
+  .carousel-image {
+    height: 200px;
+  }
+  .nav-btn-left, .nav-btn-right {
+    width: 10%;
+  }
+  .nav-button {
+    font-size: 1.5rem;
+    padding: 0.3rem;
+  }
+}
