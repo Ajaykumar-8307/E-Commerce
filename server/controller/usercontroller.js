@@ -57,6 +57,10 @@ exports.LoginUser = async (req,res) => {
         if(!user){
             return res.status(400).json({message: "Invalid Credentials"});
         }
+        const isVerified = user.verified;
+        if(!isVerified){
+            return res.status(400).json({message: "Please verify your account first."});
+        }
         if(user.isAdmin){
             const token = generateToken(user);
             return res.status(200).json({message: `Welcome Back Admin ${user.name}`, token});
