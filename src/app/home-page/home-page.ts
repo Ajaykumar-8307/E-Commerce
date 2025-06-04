@@ -8,7 +8,7 @@ import { Carousel } from '../carousel/carousel';
 
 @Component({
   selector: 'app-home-page',
-  imports: [CommonModule, FormsModule, RouterModule, Navbar, ProductList],
+  imports: [CommonModule, FormsModule, RouterModule, Navbar, ProductList, Carousel],
   standalone: true,
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.scss']
