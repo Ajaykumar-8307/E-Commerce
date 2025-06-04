@@ -1,6 +1,9 @@
 const User = require('../models/User');
+const Otp = require('../models/otp');
 const jwt = require('jsonwebtoken');
 const authenticate = require('../middleware/authentication');
+const otpGen = require('otp-generator');
+const sendOtp = require('../utils/sendEmail');
 
 const SECRET_KEY = 'my_simple_secret';
 
@@ -19,11 +22,31 @@ exports.registerUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({message: "There is already an account with this Email."});
         }
-        const user = await User.create({name,email,password, isAdmin});
+        const user = await User.create({name,email,password, isAdmin, verified: false});
+
+        const otp = otpGen.generate(6, { upperCase: false, specialChars: false, alphabets: false });
+        const otpData = await Otp.create({email, otp});
+        await sendOtp.sendOtp(email, otp);
         const token = generateToken(user);
         return res.status(200).json({message: "User Registered successfully!", token});
     } catch (error) {
         return res.status(500).json({message: "Error Registering User. Try again later."});
+    }
+}
+
+exports.verifyOtp = async (req, res) => {
+    const {email, otp} = req.body;
+    try{
+        const otpData = await Otp.findOne({email, otp});
+        if(!otpData){
+            return res.status(400).json({message: "Invalid OTP"});
+        }
+        const user = await User.findOne({email});
+        await User.updateOne({ email }, { $set: { verified: true } });
+        await Otp.deleteMany({ email });
+        return res.status(200).json({message: "OTP Verified Successfully!"});
+    }catch (error) {
+        return res.status(500).json({message: "Error Verifying OTP. Try Again Later."});
     }
 }
 
