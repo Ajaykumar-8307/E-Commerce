@@ -20,17 +20,21 @@ export class Navbar implements OnInit {
   user: any;
 
   ngOnInit() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-      this.user = decodedToken.userName;
-      localStorage.setItem('admin', decodedToken.isAdmin);
+    if(typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        this.user = decodedToken.userName;
+        localStorage.setItem('admin', decodedToken.isAdmin);
+      }
     }
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('admin');
-    this.user = null;
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+      localStorage.removeItem('admin');
+      this.user = null;
+    }
   }
 }
