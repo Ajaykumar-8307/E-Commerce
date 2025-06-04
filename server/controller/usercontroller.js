@@ -52,6 +52,27 @@ exports.verifyOtp = async (req, res) => {
     }
 }
 
+exports.resendOtp = async (req, res) => {
+    const { email } = req.body;
+    try{
+        const user = await User.findOne({ email });
+        if(user.verified) {
+            return res.status(400).json({message: "User is already verified."});
+        }
+
+        const otp = otpGen.generate(6, { upperCase: false, specialChars: false, alphabets: false });
+        const otpData = await Otp.findOneAndUpdate(
+            { email },
+            { otp },
+            { new: true, upsert: true }
+        );
+        await sendOtp.sendOtp(email, otp);
+        return res.status(200).json({message: "OTP Resent Successfully!"});
+    } catch (error) {
+        return res.status(500).json({message: "Error Resending OTP. Try Again Later."});
+    }
+}
+
 exports.LoginUser = async (req,res) => {
     const {email, password} = req.body;
     try {

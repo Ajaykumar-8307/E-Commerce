@@ -46,4 +46,7 @@ export class LoginPage {
   navigateToRegister() {
     this.router.navigate(['/register']);
   }
+  navigateToOtpVerify() {
+    this.router.navigate(['/verify'], { queryParams: { email: this.user.email } });
+  }
 }

@@ -31,7 +31,7 @@ export class RegisterPage {
         alert('Registration successful');
         console.log('Registration successful', res);
         setTimeout(() => {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/verify'], { queryParams: {email: this.user.email} });
         }, 1000);
       },
       error: (error: any) => {
