@@ -1,3 +1,4 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const fs = require('fs').promises;
 const path = require('path');
@@ -11,27 +12,39 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendVerificationEmail = async (email, otp) => {
-  const templatePath = path.join(__dirname, 'templates', 'otpverify-email-template.html');
-  let htmlContent = await fs.readFile(templatePath, 'utf8');
-  htmlContent = htmlContent.replace('{{otp}}', otp);
-  const mailOptions = {
-    from: 'kjajaykumar8307@gmail.com',
-    to: email,
-    subject: 'Email Verification Code',
-    html: htmlContent
-  };
+  try {
+    const templatePath = path.join(__dirname, 'templates', 'otpverify-email-template.html');
+    let htmlContent = await fs.readFile(templatePath, 'utf8');
+    htmlContent = htmlContent.replace(/{{otp}}/g, otp);
+    
+    const mailOptions = {
+      from: 'kjajaykumar8307@gmail.com',
+      to: email,
+      subject: 'Email Verification Code',
+      html: htmlContent
+    };
 
-  return transporter.sendMail(mailOptions);
+    return await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error('Error sending verification email:', error);
+    throw error;
+  }
 };
 
-const verifySuccesEmail = (email) => {
-  const mailOptions = {
-    from: 'kjajaykumar8307@gmail.com',
-    to: email,
-    subject: 'Verification SuccessFull',
-    html: `<p>You Have Successfully Verified Your Account in<b> AJ E-Commerce</b>, Enjoy It</p>`
-  };
-  return transporter.sendMail(mailOptions);
+const verifySuccessEmail = async (email) => {
+  try {
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Verification Successful',
+      html: `<p>You have successfully verified your account in <b>AJ E-Commerce</b>. Enjoy it!</p>`
+    };
+
+    return await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error('Error sending success email:', error);
+    throw error;
+  }
 };
 
-module.exports = { sendVerificationEmail, verifySuccesEmail };
+module.exports = { sendVerificationEmail, verifySuccessEmail };
