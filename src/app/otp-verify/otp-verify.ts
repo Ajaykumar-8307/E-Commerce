@@ -24,8 +24,10 @@ export class OtpVerify implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.verify.email = params['email'];
+      if(params['resend'] === 'true'){
+        this.resentOtp();
+      }
     });
-    this.resentOtp();
   }
 
   verifi(){
@@ -43,7 +45,7 @@ export class OtpVerify implements OnInit {
   }
 
   resentOtp(){
-    this.http.post<any>('http://localhost:3000/api/v1/user/resendotp', { email: this.verify.email }).subscribe({
+    this.http.post<any>('https://e-commerce-bmp5.onrender.com/api/v1/user/resendotp', { email: this.verify.email }).subscribe({
       next: (res: any) => {
         alert("OTP Resent Successfully");
         console.log('OTP resent successfully', res);
