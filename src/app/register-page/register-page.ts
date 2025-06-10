@@ -21,7 +21,7 @@ export class RegisterPage {
     password: '',
     isAdmin: false
   };
-  Api_URL = 'http://localhost:3000/api/v1/user/register';
+  Api_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user/register';
   message: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}

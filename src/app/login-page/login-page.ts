@@ -13,7 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class LoginPage {
 
-  Api_URL = 'http://localhost:3000/api/v1/user/login';
+  Api_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user/login';
   user = {
     email: '',
     password: ''
