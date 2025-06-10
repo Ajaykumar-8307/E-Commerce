@@ -3,7 +3,7 @@ const Otp = require('../models/otp');
 const jwt = require('jsonwebtoken');
 const authenticate = require('../middleware/authentication');
 const otpGen = require('otp-generator');
-const sendOtp = require('../utils/sendEmail');
+const sendOtp = require('../utils/sendEmailAuth');
 
 const SECRET_KEY = 'my_simple_secret';
 
@@ -26,7 +26,7 @@ exports.registerUser = async (req, res) => {
 
         const otp = otpGen.generate(6, { upperCase: false, specialChars: false, alphabets: false });
         const otpData = await Otp.create({email, otp});
-        await sendOtp.sendOtp(email, otp);
+        await sendOtp.sendVerificationEmail(email, otp);
         return res.status(200).json({message: "User Registered successfully!"});
     } catch (error) {
         return res.status(500).json({message: "Error Registering User. Try again later."});
@@ -66,7 +66,7 @@ exports.resendOtp = async (req, res) => {
             { otp },
             { new: true, upsert: true }
         );
-        await sendOtp.sendOtp(email, otp);
+        await sendOtp.sendVerificationEmail(email, otp);
         return res.status(200).json({message: "OTP Resent Successfully!"});
     } catch (error) {
         return res.status(500).json({message: "Error Resending OTP. Try Again Later."});
