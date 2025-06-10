@@ -34,7 +34,7 @@ export class OtpVerify implements OnInit {
     this.http.post<any>(this.Api_URL, this.verify).subscribe({
       next: (res: any) => {
         alert("Verification Successful");
-        console.log('Verification successful', res);
+        console.log('Verification successful', res.email);
         localStorage.setItem('token', res.token);
         this.router.navigate(['/login']);
       }, error: (error: any) => {
