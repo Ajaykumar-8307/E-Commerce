@@ -15,7 +15,10 @@ const sendVerificationEmail = async (email, otp) => {
   try {
     const templatePath = path.join(__dirname, 'otpverify-email-template.html');
     let htmlContent = await fs.readFile(templatePath, 'utf8');
-    htmlContent = htmlContent.replace(/{{otp}}/g, otp);
+    htmlContent = htmlContent
+      .replace(/{otp}/g, otp)
+      .replace(/{email}/g, email);
+
     
     const mailOptions = {
       from: 'kjajaykumar8307@gmail.com',
