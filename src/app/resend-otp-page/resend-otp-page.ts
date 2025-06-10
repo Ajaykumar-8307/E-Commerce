@@ -15,7 +15,7 @@ export class ResendOtpPage {
 
   constructor(private http: HttpClient, private route: Router){}
 
-  email = 'kjajaykumar5@gmail.com';
+  email = '';
 
   API_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user/resendotp';
 

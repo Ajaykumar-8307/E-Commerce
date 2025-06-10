@@ -47,6 +47,6 @@ export class LoginPage {
     this.router.navigate(['/register']);
   }
   navigateToOtpVerify() {
-    this.router.navigate(['/verify'], { queryParams: { email: this.user.email, resend: true } });
+    this.router.navigate(['/resendOtp']);
   }
 }
