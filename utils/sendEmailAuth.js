@@ -19,4 +19,14 @@ const sendVerificationEmail = (email, otp) => {
   return transporter.sendMail(mailOptions);
 };
 
-module.exports = { sendVerificationEmail };
+const verifySuccesEmail = (email) => {
+  const mailOptions = {
+    from: 'kjajaykumar8307@gmail.com',
+    to: email,
+    subject: 'Verification SuccessFull',
+    html: `<p>You Have Successfully Verified Your Account in<b> AJ E-Commerce</b>, Enjoy It</p>`
+  };
+  return transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendVerificationEmail, verifySuccesEmail };
