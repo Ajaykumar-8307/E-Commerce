@@ -3,7 +3,7 @@ const Otp = require('../models/otp');
 const jwt = require('jsonwebtoken');
 const authenticate = require('../middleware/authentication');
 const otpGen = require('otp-generator');
-const { sendVerificationEmail, verifySuccesEmail } = require('../utils/sendEmailAuth');
+const { sendVerificationEmail, verifySuccessEmail } = require('../utils/sendEmailAuth');
 
 const SECRET_KEY = 'my_simple_secret';
 
@@ -46,7 +46,7 @@ exports.verifyOtp = async (req, res) => {
         // Generate a new token for the user after verification
         const userT = await User.findOne({ email });
         const token = generateToken(userT);
-        await verifySuccesEmail(email);
+        await verifySuccessEmail(email);
         return res.status(200).json({message: "OTP Verified Successfully!", token, email});
     }catch (error) {
         return res.status(500).json({message: "Error Verifying OTP. Try Again Later."});

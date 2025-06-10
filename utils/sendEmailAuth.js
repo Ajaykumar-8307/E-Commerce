@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 const sendVerificationEmail = async (email, otp) => {
   try {
-    const templatePath = path.join(__dirname, 'templates', 'otpverify-email-template.html');
+    const templatePath = path.join(__dirname, 'otpverify-email-template.html');
     let htmlContent = await fs.readFile(templatePath, 'utf8');
     htmlContent = htmlContent.replace(/{{otp}}/g, otp);
     
