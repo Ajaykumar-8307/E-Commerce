@@ -96,6 +96,20 @@ exports.LoginUser = async (req,res) => {
     }
 }
 
+exports.delUser = async (req,res) => {
+    const { email } = req.body;
+    try{
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(500).json({message: "Given User Not Exist"});
+        }
+        await User.deleteMany({email});
+        return res.status(200).json({message: "Account Deleted Successfully"});
+    } catch (error){
+        return res.status(400).json({message: "Error to deleting User"});
+    }
+}
+
 exports.getUser = (req, res) => {
     res.status(200).json({ message: 'Welcome to your profile', user: req.user });
 }
