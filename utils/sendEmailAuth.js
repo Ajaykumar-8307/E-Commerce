@@ -36,6 +36,9 @@ const sendVerificationEmail = async (email, otp) => {
 
 const verifySuccessEmail = async (email) => {
   try {
+    const templatePath = path.join(__dirname, 'verifySuccess.html');
+    let htmlContent = await fs.readFile(templatePath, 'utf8');
+    htmlContent = htmlContent.replace(/{email}/g, email);
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
