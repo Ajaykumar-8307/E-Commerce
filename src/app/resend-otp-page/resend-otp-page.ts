@@ -30,7 +30,7 @@ export class ResendOtpPage {
         }, 1000);
         console.log("Sent Otp");
       }, error: (error: any) => {
-        alert(`Error : ${error.error.message}`);
+        alert(`${error.error.message}`);
       }
     });
   }

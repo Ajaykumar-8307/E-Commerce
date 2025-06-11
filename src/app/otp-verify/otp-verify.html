@@ -1,6 +1,19 @@
-<p>Enter the OTP sent to {{ verify.email }}</p>
-<form (ngSubmit)="verifi()">
-  <input [(ngModel)]="verify.otp" [ngModelOptions]="{standalone: true}" placeholder="Enter OTP" />
-  <button type="submit">Verify</button>
-</form>
-<a (click)="resentOtp()" style="display: pointer;">Resend OTP</a>
+<div class="verify-container">
+  <div class="verify-card">
+    <h2>OTP Verification</h2>
+    <p>Enter the OTP sent to <strong>{{ verify.email }}</strong></p>
+
+    <form (ngSubmit)="verifi()">
+      <input
+        type="text"
+        [(ngModel)]="verify.otp"
+        [ngModelOptions]="{ standalone: true }"
+        placeholder="Enter OTP"
+        maxlength="6"
+      />
+      <button type="submit">Verify</button>
+    </form>
+
+    <a (click)="resentOtp()" class="resend-link">Resend OTP</a>
+  </div>
+</div>

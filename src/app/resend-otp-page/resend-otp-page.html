@@ -1,4 +1,18 @@
-<form (ngSubmit)="resendOtp()">
-    <input type="text" name="email" id="email" placeholder="Enter Your Email to send OTP" [(ngModel)]="email"><br>
-    <input type="submit" value="Get Verify Code" (submit)="resendOtp()">
-</form>
+<div class="verify-container">
+  <div class="verify-card">
+    <h2>Resend OTP</h2>
+    <p>Enter your email to receive a verification code</p>
+
+    <form (ngSubmit)="resendOtp()" #form="ngForm">
+      <input
+        type="email"
+        name="email"
+        id="email"
+        placeholder="Enter Your Email"
+        [(ngModel)]="email"
+        required
+      />
+      <button type="submit">Get Verify Code</button>
+    </form>
+  </div>
+</div>
