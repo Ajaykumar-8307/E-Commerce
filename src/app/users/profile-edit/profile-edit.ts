@@ -1,28 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-profile-edit',
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule, FormsModule],
   templateUrl: './profile-edit.html',
   styleUrls: ['./profile-edit.scss']
 })
 export class ProfileEdit implements OnInit{
 
-  constructor(private router: Router, private route: ActivatedRoute){}
+  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient){}
 
   isSidebarOpen = false;
 
+  API_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user'
+
   user = {
-    name: String,
-    email: String,
-    phone: Number,
-    Address: String
+    name: '',
+    email: '',
+    phone: '',
+    Address: ''
   }
 
-  id: String = '';
+  id: string = '';
+  email: string = '';
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -34,7 +39,31 @@ export class ProfileEdit implements OnInit{
         const decodedToken: any = jwtDecode(token);
         this.user.name = decodedToken.userName;
         this.user.email = decodedToken.email;
+        this.email = decodedToken.email;
       }
+      this.http.get<any>(`${this.API_URL}/get-user-details`, { params: { email: this.user.email } }).subscribe({
+        next: (res: any) => {
+          this.user.phone = res.userDetails.phone;
+          this.user.Address = res.userDetails.Address;
+          console.log(this.user.phone);
+        },
+        error: (error: any) => {
+          alert(`${error.error.message}`);
+        }
+      });
+    }
+  }
+
+  OnSubmit(){
+    if(this.user){
+      this.http.put<any>(this.API_URL+'/update-profile', this.user).subscribe({
+        next: (res: any) => {
+          alert(`${res.message}`);
+        },
+        error: (error: any) => {
+          alert(`${error.error.message}`);
+        }
+      });
     }
   }
 
