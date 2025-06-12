@@ -143,18 +143,39 @@ exports.getUser = async (req, res) => {
 
 
 exports.changeDetails = async (req,res) => {
-    const { email, phone, Address } = req.body;
+    const { name, email, phone, Address } = req.body;
     try{
-        const user = await UserProfile.findOneAndUpdate(
+        const userP = await UserProfile.findOneAndUpdate(
             {email}, 
             {phone, Address},
             {new: true, runValidators: true}
         );
-        if(!user){
+        const user = await User.findOneAndUpdate(
+            {email},
+            {name},
+            {new: true, runValidators: true}
+        );
+        if(!userP){
             return res.status(500).json({message: "User not founded"});
+        }
+        if(!user){
+            return res.status(401).json({message: "User Not Found"});
         }
         return res.status(200).json({message: "Profile Updated Successfully !"});
     } catch (error){
         return res.status(400).json({message: "Error to Update your Profile"});
+    }
+}
+
+exports.getUserProfile = async (req,res) => {
+    const { email } = req.query;
+    try{
+        const userProfile = await UserProfile.findOne({email});
+        if(!userProfile){
+            return res.status(500).json({message: "User Not Found"});
+        }
+        return res.status(200).json({message: "User Find", userDetails: userProfile});
+    } catch(error){
+        return res.status(400).json({message: "Failed to load user Details"});
     }
 }
