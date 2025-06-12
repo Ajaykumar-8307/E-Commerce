@@ -9,6 +9,6 @@ router.post('/verify', verifyOtp);
 router.post('/resendotp', resendOtp);
 router.post('/deluser', delUser);
 
-router.get('/getuser', authenticate, getUser);
+router.get('/getuser', getUser);
 
 module.exports = router;
