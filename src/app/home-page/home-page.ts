@@ -14,5 +14,4 @@ import { Carousel } from '../carousel/carousel';
   styleUrls: ['./home-page.scss']
 })
 export class HomePage {
-
 }

@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
 @Component({
@@ -13,6 +13,8 @@ import { jwtDecode } from 'jwt-decode';
   encapsulation: ViewEncapsulation.None
 })
 export class Navbar implements OnInit {
+
+  constructor(private route: Router){}
   selectedValue = '';
   location: string[] = ['Thanjavur', 'Trichy', 'Coimbatore', 'Kumbakkonam'];
   categories: string[] = ['Food', 'Electronics', 'Dress', 'FootWear'];
@@ -23,9 +25,13 @@ export class Navbar implements OnInit {
     if(typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
       if (token) {
-        const decodedToken: any = jwtDecode(token);
-        this.user = decodedToken.userName;
-        localStorage.setItem('admin', decodedToken.isAdmin);
+        try{
+          const decodedToken: any = jwtDecode(token);
+          this.user = decodedToken.userName;
+          localStorage.setItem('admin', decodedToken.isAdmin);
+        } catch (error){
+          this.logout();
+        }
       }
     }
   }
@@ -35,6 +41,16 @@ export class Navbar implements OnInit {
       localStorage.removeItem('token');
       localStorage.removeItem('admin');
       this.user = null;
+    }
+  }
+
+  navToProfile(){
+    if(typeof window !== 'undefined'){
+      const token = localStorage.getItem('token');
+      if(token){
+        const decodedToken: any = jwtDecode(token);
+        this.route.navigate(['/userprofile'], {queryParams: {id: token}});
+      }
     }
   }
 }
