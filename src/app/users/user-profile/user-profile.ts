@@ -5,6 +5,7 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { error } from 'console';
+import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 
 @Component({
   selector: 'app-user-profile',
@@ -25,12 +26,14 @@ export class UserProfile implements OnInit{
     name: String,
     email: String
   }
+  token: any;
   password: any;
   newpass: any;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.user.token = params['id'];
+      this.token = params['id'];
     });
     if(typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
@@ -73,6 +76,16 @@ export class UserProfile implements OnInit{
     }
     if (window.innerWidth <= 768) {
       this.isSidebarOpen = false;
+    }
+  }
+
+  navToEdit(){
+    if(typeof window !== 'undefined'){
+      const token = localStorage.getItem('token');
+      if(token){
+        const decodedToken: any = jwtDecode(token);
+        this.router.navigate(['/edit-profile'], {queryParams: {id: token}});
+      }
     }
   }
 }

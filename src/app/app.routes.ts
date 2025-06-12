@@ -6,6 +6,7 @@ import { RegisterPage } from './register-page/register-page';
 import { OtpVerify } from './otp-verify/otp-verify';
 import { ResendOtpPage } from './resend-otp-page/resend-otp-page';
 import { UserProfile } from './users/user-profile/user-profile';
+import { ProfileEdit } from './users/profile-edit/profile-edit';
 
 export const routes: Routes = [
   { path: '', component: HomePage },         // default route 
@@ -13,7 +14,8 @@ export const routes: Routes = [
   { path: 'register', component: RegisterPage }, // /register route
   { path: 'verify', component: OtpVerify },
   { path: 'resendOtp', component: ResendOtpPage },
-  { path: 'userprofile', component: UserProfile }
+  { path: 'userprofile', component: UserProfile },
+  { path: 'edit-profile', component: ProfileEdit }
 ];
 
 @NgModule({
