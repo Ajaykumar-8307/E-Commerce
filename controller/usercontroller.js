@@ -96,6 +96,21 @@ exports.LoginUser = async (req,res) => {
     }
 }
 
+exports.changePass = async (req, res) => {
+    const { email, password, newpass } = req.body;
+    try{
+        const user = await User.findOne({email, password});
+        if(!user){
+            return res.status(500).json({message: "Invalid Credentials"});
+        }
+        user.password = newpass;
+        await user.save();
+        return res.status(200).json({message: "Password Changed Successfully"});
+    } catch (error){
+        return res.status(400).json({messsage: "Error to Change the password"});
+    }
+}
+
 exports.delUser = async (req,res) => {
     const { email } = req.body;
     try{
