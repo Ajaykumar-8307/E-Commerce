@@ -34,16 +34,16 @@ const sendVerificationEmail = async (email, otp) => {
   }
 };
 
-const verifySuccessEmail = async (email) => {
+const verifySuccessEmail = async (email, name) => {
   try {
     const templatePath = path.join(__dirname, 'verifySuccess.html');
     let htmlContent = await fs.readFile(templatePath, 'utf8');
-    htmlContent = htmlContent.replace(/{email}/g, email);
+    htmlContent = htmlContent.replace(/{email}/g, name);
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Verification Successful',
-      html: `<p>You have successfully verified your account in <b>AJ E-Commerce</b>. Enjoy it!</p>`
+      html: htmlContent
     };
 
     return await transporter.sendMail(mailOptions);

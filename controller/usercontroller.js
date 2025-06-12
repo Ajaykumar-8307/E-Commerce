@@ -46,7 +46,7 @@ exports.verifyOtp = async (req, res) => {
         // Generate a new token for the user after verification
         const userT = await User.findOne({ email });
         const token = generateToken(userT);
-        await verifySuccessEmail({email: user.name});
+        await verifySuccessEmail(userT.email,userT.name);
         return res.status(200).json({message: "OTP Verified Successfully!", token, email});
     }catch (error) {
         return res.status(500).json({message: "Error Verifying OTP. Try Again Later."});
