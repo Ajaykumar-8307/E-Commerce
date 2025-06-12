@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const UserProfile = require('../models/UserProfile');
 const Otp = require('../models/otp');
 const jwt = require('jsonwebtoken');
 const authenticate = require('../middleware/authentication');
@@ -26,6 +27,7 @@ exports.registerUser = async (req, res) => {
 
         const otp = otpGen.generate(6, { upperCase: false, specialChars: false, alphabets: false });
         const otpData = await Otp.create({email, otp});
+        const profileDetails = await UserProfile.create({email, phone: null, Address: null});
         await sendVerificationEmail(email, otp);
         return res.status(200).json({message: "User Registered successfully!"});
     } catch (error) {
@@ -129,11 +131,30 @@ exports.getUser = async (req, res) => {
     const {email} = req.body;
     try{
         const user = await User.findOne({email});
+        const details = await UserProfile.findOne({email});
         if(!user){
             return res.status(500).json({message:"Given user not exist"});
         }
-        res.status(200).json({ message: 'Welcome to your profile', email: user.email, name: user.name });
+        res.status(200).json({ message: 'Welcome to your profile', email: user.email, name: user.name, details });
     } catch (error){
         return res.status(400).json({message:"Error to get user"});
+    }
+}
+
+
+exports.changeDetails = async (req,res) => {
+    const { email, phone, Address } = req.body;
+    try{
+        const user = await UserProfile.findOneAndUpdate(
+            {email}, 
+            {phone, Address},
+            {new: true, runValidators: true}
+        );
+        if(!user){
+            return res.status(500).json({message: "User not founded"});
+        }
+        return res.status(200).json({message: "Profile Updated Successfully !"});
+    } catch (error){
+        return res.status(400).json({message: "Error to Update your Profile"});
     }
 }
