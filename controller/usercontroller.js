@@ -146,31 +146,43 @@ exports.getUser = async (req, res) => {
 }
 
 
-exports.changeDetails = async (req,res) => {
-    const { name, email, phone, Address } = req.body;
-    try{
-        const userP = await UserProfile.findOneAndUpdate(
-            {email}, 
-            {phone, Address},
-            {new: true, runValidators: true}
-        );
-        const user = await User.findOneAndUpdate(
-            {email},
-            {name},
-            {new: true, runValidators: true}
-        );
-        if(!userP){
-            await userP.create({email, phone, Address});
-            return res.status(500).json({message: "User not founded"});
-        }
-        if(!user){
-            return res.status(401).json({message: "User Not Found"});
-        }
-        return res.status(200).json({message: "Profile Updated Successfully !"});
-    } catch (error){
-        return res.status(400).json({message: "Error to Update your Profile"});
+exports.changeDetails = async (req, res) => {
+  const { name, email, phone, Address } = req.body;
+
+  try {
+    // Update profile or create new if it doesn't exist
+    let userProfile = await UserProfile.findOne({ email });
+
+    if (!userProfile) {
+      // Create new profile if not found
+      userProfile = await UserProfile.create({ email, phone, Address });
+    } else {
+      // Update existing profile
+      userProfile = await UserProfile.findOneAndUpdate(
+        { email },
+        { phone, Address },
+        { new: true, runValidators: true }
+      );
     }
-}
+
+    // Update name in Auth collection
+    const user = await User.findOneAndUpdate(
+      { email },
+      { name },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found in Auth collection" });
+    }
+
+    return res.status(200).json({ message: "Profile Updated Successfully!" });
+
+  } catch (error) {
+    console.error("Profile update error:", error);
+    return res.status(400).json({ message: "Error updating your profile" });
+  }
+};
 
 exports.getUserProfile = async (req,res) => {
     const { email } = req.query;
