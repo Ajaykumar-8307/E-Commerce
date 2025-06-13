@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-profile-edit',
@@ -13,7 +14,12 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class ProfileEdit implements OnInit{
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient){}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private cd: ChangeDetectorRef
+  ){}
 
   isSidebarOpen = false;
 
@@ -22,8 +28,8 @@ export class ProfileEdit implements OnInit{
   user = {
     name: '',
     email: '',
-    phone: '',
-    Address: ''
+    phone: 'None',
+    Address: 'None'
   }
 
   id: string = '';
@@ -45,6 +51,7 @@ export class ProfileEdit implements OnInit{
         next: (res: any) => {
           this.user.phone = res.userDetails.phone;
           this.user.Address = res.userDetails.Address;
+          this.cd.detectChanges();
           console.log(this.user.phone);
         },
         error: (error: any) => {

@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { error } from 'console';
 import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,11 +16,16 @@ import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 })
 export class UserProfile implements OnInit{
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient){}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private cd: ChangeDetectorRef
+  ){}
 
   isSidebarOpen = false;
   activeLink = 'profile';
-  API_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user/changepass';
+  API_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user';
 
   user: any = {
     token: String,
@@ -29,6 +35,12 @@ export class UserProfile implements OnInit{
   token: any;
   password: any;
   newpass: any;
+  email: any;
+
+  userdetails: any = {
+    phone: 'None',
+    Address: 'None'
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -41,12 +53,23 @@ export class UserProfile implements OnInit{
         const decodedToken: any = jwtDecode(token);
         this.user.name = decodedToken.userName;
         this.user.email = decodedToken.email;
+        this.email = decodedToken.email;
+        this.http.get<any>(`${this.API_URL}/get-user-details`, { params: {email: decodedToken.email} }).subscribe({
+          next: (res: any) => {
+            this.userdetails.phone = res.userDetails.phone || 'None';
+            this.userdetails.Address = res.userDetails.Address || 'None';
+            this.cd.detectChanges();
+          },
+          error: (error: any) => {
+            alert(`${error.error.message}`);
+          }
+        })
       }
     }
   }
 
   changePass(){
-    this.http.post<any>(this.API_URL, {
+    this.http.post<any>(`${this.API_URL}/changepass`, {
       email: this.user.email,
       password: this.password,
       newpass: this.newpass
@@ -87,5 +110,28 @@ export class UserProfile implements OnInit{
         this.router.navigate(['/edit-profile'], {queryParams: {id: token}});
       }
     }
+  }
+
+  logout(){
+    if(typeof window !== 'undefined'){
+      localStorage.clear();
+      alert("Account Logout");
+      this.router.navigate(['/']);
+    }
+  }
+
+  delUser(){
+    localStorage.clear();
+    this.http.post<any>(`${this.API_URL}/deluser`, {
+      email: this.user.email
+    }).subscribe({
+      next: (res: any) => {
+        alert(`${res.message}`);
+      },
+      error: (error: any) => {
+        alert(`${error.error.message}`);
+      }
+    });
+    this.router.navigate(['/']);
   }
 }

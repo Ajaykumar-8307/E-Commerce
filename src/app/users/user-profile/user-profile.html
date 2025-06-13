@@ -15,7 +15,9 @@
             <a href="#profile" (click)="selectLink($event, 'profile')" [ngClass]="{'active': activeLink === 'profile'}">Profile</a>
             <a href="#orders" (click)="selectLink($event, 'orders')" [ngClass]="{'active': activeLink === 'orders'}">Order History</a>
             <a href="#settings" (click)="selectLink($event, 'settings')" [ngClass]="{'active': activeLink === 'settings'}">Account Settings</a>
-            <a href="#" class="text-red-600">Logout</a>
+            <a style="cursor: pointer">Admin Dashboard</a>
+            <a (click)="logout()" style="cursor: pointer" class="text-red-600">Logout</a>
+            <a (click)="delUser()" style="color: red; cursor: pointer">Delete Account</a>
         </nav>
     </aside>
 
@@ -36,11 +38,11 @@
                     </div>
                     <div>
                         <label>Phone Number</label>
-                        <input type="tel" value="None" readonly>
+                        <input type="tel" [(ngModel)]="userdetails.phone" readonly>
                     </div>
                     <div>
                         <label>Address</label>
-                        <input type="text" value="None" readonly>
+                        <input type="text" [(ngModel)]="userdetails.Address" readonly>
                     </div>
                 </div>
                 <a (click)="navToEdit()" class="btn">Edit Profile</a>
