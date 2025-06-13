@@ -105,6 +105,9 @@ exports.changePass = async (req, res) => {
         if(!user){
             return res.status(500).json({message: "Invalid Credentials"});
         }
+        if(newpass==user.password){
+            return res.status(501).json({message: "You are Entering Current Password. Use Different Password"});
+        }
         user.password = newpass;
         await user.save();
         return res.status(200).json({message: "Password Changed Successfully"});
