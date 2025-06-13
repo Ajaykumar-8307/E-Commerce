@@ -124,6 +124,7 @@ exports.delUser = async (req,res) => {
             return res.status(500).json({message: "Given User Not Exist"});
         }
         await User.deleteMany({email});
+        await UserProfile.deleteMany({email});
         return res.status(200).json({message: "Account Deleted Successfully"});
     } catch (error){
         return res.status(400).json({message: "Error to deleting User"});
@@ -159,6 +160,7 @@ exports.changeDetails = async (req,res) => {
             {new: true, runValidators: true}
         );
         if(!userP){
+            await userP.create({email, phone, Address});
             return res.status(500).json({message: "User not founded"});
         }
         if(!user){
