@@ -150,11 +150,9 @@ exports.changeDetails = async (req, res) => {
   const { name, email, phone, Address } = req.body;
 
   try {
-    // Update profile or create new if it doesn't exist
     let userProfile = await UserProfile.findOne({ email });
 
     if (!userProfile) {
-      // Create new profile if not found
       userProfile = await UserProfile.create({ email, phone, Address });
     } else {
       // Update existing profile
@@ -164,8 +162,6 @@ exports.changeDetails = async (req, res) => {
         { new: true, runValidators: true }
       );
     }
-
-    // Update name in Auth collection
     const user = await User.findOneAndUpdate(
       { email },
       { name },
