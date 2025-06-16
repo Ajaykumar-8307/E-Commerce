@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const userRouter = require('./router/userrouter'); // Import user router  
+const userRouter = require('./router/userrouter'); // Import user router 
+const productRouter = require('./router/productrouter') ;
 const session = require('express-session');
 
 const app = express();
@@ -25,6 +26,7 @@ mongoose.connect(URL, {
 
 // Routes
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/product', productRouter);
 
 
 
