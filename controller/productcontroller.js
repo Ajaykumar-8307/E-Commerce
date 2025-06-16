@@ -3,7 +3,8 @@ const User = require('../models/User');
 
 exports.addProduct = async (req, res) => {
     const { name, category, price, stocks, location, description, adminId } = req.body;
-    const image = `https://e-commerce-bmp5.onrender.com/uploads/${req.file.filename}`;
+    const image = `https://e-commerce-bmp5.onrender.com/uploads/${req.files['productImage'][0].filename}`;
+    const com_logo = `https://e-commerce-bmp5.onrender.com/uploads/${req.files['companyLogo'][0].filename}`;
     try {
         const user = await User.findById(adminId);
         if(!user){
@@ -12,7 +13,7 @@ exports.addProduct = async (req, res) => {
         if(!user.isAdmin){
             return res.status(401).json({message: "Your Not A Admin. Create a admin account to sell your Products"});;
         }
-        const product = await Product.create({ name, category, price, stocks, location, description, image, adminId });
+        const product = await Product.create({ name, category, price, stocks, location, description, image, com_logo, adminId });
         return res.status(200).json({ message: "Product Added Successfully", product });
     } catch (error) {
         return res.status(400).json({ message: "Error to Add your Product" });
