@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 exports.addProduct = async (req, res) => {
     const { name, category, price, stocks, location, description, adminId } = req.body;
-    const image = `http://localhost:3000/uploads/${req.file.filename}`;
+    const image = `https://e-commerce-bmp5.onrender.com/uploads/${req.file.filename}`;
     try {
         const user = await User.findById(adminId);
         if(!user){
