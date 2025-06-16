@@ -1,0 +1,134 @@
+aside {
+  background-color: #ffffff;
+  width: 250px;
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+  z-index: 999;
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #2d3436;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      fill: #1e40af;
+    }
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      fill: #555;
+      transition: fill 0.3s;
+    }
+
+    &:hover {
+      background-color: #e5e7eb;
+      color: #1e40af;
+
+      svg {
+        fill: #1e40af;
+      }
+    }
+
+    &.active {
+      background-color: #1e40af;
+      color: #fff;
+
+      svg {
+        fill: #fff;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  aside {
+    width: 220px;
+  }
+}
+
+@media (max-width: 1024px) {
+  aside {
+    width: 200px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+    nav a {
+      font-size: 0.9rem;
+      padding: 8px 10px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  aside {
+    transform: translateX(-100%);
+    width: 200px;
+  }
+  aside.sidebar-open {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 480px) {
+  aside {
+    width: 180px;
+    padding: 15px;
+
+    h2 {
+      font-size: 1.4rem;
+    }
+    nav a {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  aside {
+    width: 160px;
+    padding: 10px;
+
+    h2 {
+      font-size: 1.2rem;
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+    nav a {
+      font-size: 0.85rem;
+      padding: 6px 8px;
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}

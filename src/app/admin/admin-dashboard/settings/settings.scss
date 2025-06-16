@@ -1,0 +1,177 @@
+section {
+  margin-bottom: 40px;
+
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #2d3436;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      fill: #1e40af;
+    }
+  }
+}
+
+.card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  label {
+    font-size: 0.95rem;
+    color: #2d3436;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #1e40af;
+      box-shadow: 0 0 6px rgba(30, 64, 175, 0.2);
+    }
+  }
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  label {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #2d3436;
+    cursor: pointer;
+  }
+}
+
+.checkbox-state {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 25px;
+  background-color: #1e40af;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 15px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+  border: none;
+  min-width: 120px;
+  text-align: center;
+
+  &:hover {
+    background-color: #1e3a8a;
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 1024px) {
+  section h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  form input[type="password"] {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+  .btn {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  section h3 {
+    font-size: 1.4rem;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  form label {
+    font-size: 0.9rem;
+  }
+  form input[type="password"] {
+    padding: 6px;
+    font-size: 0.85rem;
+  }
+  .checkbox-group label {
+    font-size: 0.85rem;
+  }
+  .checkbox-state {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  section {
+    margin-bottom: 30px;
+
+    h3 {
+      font-size: 1.2rem;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  form label {
+    font-size: 0.85rem;
+  }
+  form input[type="password"] {
+    padding: 5px;
+    font-size: 0.8rem;
+  }
+  .checkbox-group label {
+    font-size: 0.8rem;
+  }
+  .checkbox-state {
+    width: 12px;
+    height: 12px;
+  }
+  .btn {
+    padding: 8px;
+    font-size: 0.85rem;
+    min-width: 100px;
+  }
+}

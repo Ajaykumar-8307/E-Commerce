@@ -7,6 +7,11 @@ import { OtpVerify } from './otp-verify/otp-verify';
 import { ResendOtpPage } from './resend-otp-page/resend-otp-page';
 import { UserProfile } from './users/user-profile/user-profile';
 import { ProfileEdit } from './users/profile-edit/profile-edit';
+import { AdminPage } from './admin/admin-dashboard/admin-page/admin-page';
+import { Dashboard } from './admin/admin-dashboard/dashboard/dashboard';
+import { Products } from './admin/admin-dashboard/products/products';
+import { Orders } from './admin/admin-dashboard/orders/orders';
+import { Settings } from './admin/admin-dashboard/settings/settings';
 
 export const routes: Routes = [
   { path: '', component: HomePage },         // default route 
@@ -15,7 +20,18 @@ export const routes: Routes = [
   { path: 'verify', component: OtpVerify },
   { path: 'resendOtp', component: ResendOtpPage },
   { path: 'userprofile', component: UserProfile },
-  { path: 'edit-profile', component: ProfileEdit }
+  { path: 'edit-profile', component: ProfileEdit },
+
+  //admin page
+  { path: 'admin', component: AdminPage, 
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: Dashboard },
+      { path: 'products', component: Products },
+      { path: 'orders', component: Orders },
+      { path: 'settings', component: Settings }
+    ]
+   }
 ];
 
 @NgModule({

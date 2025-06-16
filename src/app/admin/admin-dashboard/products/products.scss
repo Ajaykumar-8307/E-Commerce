@@ -1,0 +1,239 @@
+section {
+  margin-bottom: 40px;
+
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #2d3436;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      fill: #1e40af;
+    }
+  }
+}
+
+.product-table-container {
+  overflow-x: auto;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #2d3436;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  td {
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background-color: #f1f3f5;
+  }
+}
+
+.action-btn {
+  padding: 6px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  border: none;
+  margin-right: 5px;
+  min-width: 60px;
+}
+
+.edit-btn {
+  background-color: #1e40af;
+  color: #fff;
+
+  &:hover {
+    background-color: #1e3a8a;
+  }
+}
+
+.delete-btn {
+  background-color: #dc2626;
+  color: #fff;
+
+  &:hover {
+    background-color: #b91c1c;
+  }
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 25px;
+  background-color: #1e40af;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+  border: none;
+  min-width: 120px;
+  text-align: center;
+
+  &:hover {
+    background-color: #1e3a8a;
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 1024px) {
+  section h3 {
+    font-size: 1.5rem;
+  }
+  .product-table th,
+  .product-table td {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+  .action-btn {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+    min-width: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-table-container {
+    overflow-x: hidden;
+  }
+  .product-table {
+    display: block;
+    box-shadow: none;
+    background: none;
+
+    thead {
+      display: none;
+    }
+    tbody {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    tr {
+      display: block;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      padding: 10px;
+    }
+    tr:hover {
+      background-color: #ffffff;
+    }
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+    td:last-child {
+      border-bottom: none;
+    }
+    td:before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #2d3436;
+      margin-right: 10px;
+    }
+    td[data-label="Actions"] {
+      display: flex;
+      justify-content: flex-end;
+      gap: 5px;
+    }
+    td[data-label="Actions"]:before {
+      display: none;
+    }
+  }
+  .btn {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  section h3 {
+    font-size: 1.4rem;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .product-table td {
+    font-size: 0.8rem;
+    padding: 6px 8px;
+  }
+  .product-table td:before {
+    font-size: 0.8rem;
+  }
+  .action-btn {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    min-width: 48px;
+  }
+}
+
+@media (max-width: 320px) {
+  section {
+    margin-bottom: 30px;
+
+    h3 {
+      font-size: 1.2rem;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  .product-table tr {
+    padding: 8px;
+  }
+  .product-table td {
+    font-size: 0.75rem;
+    padding: 5px 6px;
+  }
+  .product-table td:before {
+    font-size: 0.75rem;
+  }
+  .action-btn {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    min-width: 40px;
+  }
+}
