@@ -30,7 +30,7 @@ exports.getProducts = async (req, res) => {
 }
 
 exports.getAdminProducts = async (req, res) => {
-    const { adminId } = req.body;
+    const { adminId } = req.query;
     try{
         const products = await Product.find({adminId});
         return res.status(200).json(products);
