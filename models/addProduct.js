@@ -9,7 +9,7 @@ const ProductSchema = new mongoose.Schema({
   location: { type: String, required: true },
   description: { type: String, required: false },
   imageUrl: { type: String, required: true },
-  adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   createdAt: { type: Date, default: Date.now }
 });
 
