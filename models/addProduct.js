@@ -8,7 +8,7 @@ const ProductSchema = new mongoose.Schema({
   stocks: {type: Number, required: true},
   location: { type: String, required: true },
   description: { type: String, required: false },
-  image: { data: Buffer, contentType: String, filename: String },
+  imageUrl: { type: String, required: true },
   adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   createdAt: { type: Date, default: Date.now }
 });

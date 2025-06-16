@@ -26,6 +26,7 @@ mongoose.connect(URL, {
 
 // Routes
 app.use('/api/v1/user', userRouter);
+app.use('/uploads', express.static('uploads'));
 app.use('/api/v1/product', productRouter);
 
 

@@ -2,7 +2,8 @@ const Product = require('../models/addProduct');
 const User = require('../models/User');
 
 exports.addProduct = async (req, res) => {
-    const { name, price, stocks, location, description, image, adminId } = req.body;
+    const { name, category, price, stocks, location, description, adminId } = req.body;
+    const image = `http://localhost:3000/uploads/${req.file.filename}`;
     try {
         const user = await User.findById(adminId);
         if(!user){
@@ -11,7 +12,7 @@ exports.addProduct = async (req, res) => {
         if(!user.isAdmin){
             return res.status(401).json({message: "Your Not A Admin. Create a admin account to sell your Products"});;
         }
-        const product = await Product.create({ name, price, stocks, location, description, image, adminId });
+        const product = await Product.create({ name, category, price, stocks, location, description, image, adminId });
         return res.status(200).json({ message: "Product Added Successfully", product });
     } catch (error) {
         return res.status(400).json({ message: "Error to Add your Product" });
