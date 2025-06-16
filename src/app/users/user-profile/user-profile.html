@@ -15,7 +15,7 @@
             <a href="#profile" (click)="selectLink($event, 'profile')" [ngClass]="{'active': activeLink === 'profile'}">Profile</a>
             <a href="#orders" (click)="selectLink($event, 'orders')" [ngClass]="{'active': activeLink === 'orders'}">Order History</a>
             <a href="#settings" (click)="selectLink($event, 'settings')" [ngClass]="{'active': activeLink === 'settings'}">Account Settings</a>
-            <a style="cursor: pointer">Admin Dashboard</a>
+            <a style="cursor: pointer" *ngIf="isAdmin" (click)="navToAdminPage()">Admin Dashboard</a>
             <a (click)="logout()" style="cursor: pointer" class="text-red-600">Logout</a>
             <a (click)="delUser()" style="color: red; cursor: pointer">Delete Account</a>
         </nav>

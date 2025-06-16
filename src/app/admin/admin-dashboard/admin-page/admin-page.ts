@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Sidebar } from '../sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-admin-page',
@@ -10,11 +11,28 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './admin-page.html',
   styleUrl: './admin-page.scss'
 })
-export class AdminPage {
+export class AdminPage implements OnInit {
 
   isSidebarOpen = false;
 
-  constructor(private router: Router) {}
+  token: any = '';
+  isAdmin: boolean = false;
+
+  constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.token = localStorage.getItem('token');
+      const deCodedToken: any = jwtDecode(this.token);
+      if(deCodedToken){
+        this.isAdmin = deCodedToken.isAdmin;
+      }
+      if (!this.isAdmin) {
+        alert('UnAuthorized Access');
+        this.router.navigate(['/']);
+      }
+    }
+  }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;

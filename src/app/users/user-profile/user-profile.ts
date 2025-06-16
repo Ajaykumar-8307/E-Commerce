@@ -14,14 +14,14 @@ import { ChangeDetectorRef } from '@angular/core';
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.scss'
 })
-export class UserProfile implements OnInit{
+export class UserProfile implements OnInit {
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
     private cd: ChangeDetectorRef
-  ){}
+  ) { }
 
   isSidebarOpen = false;
   activeLink = 'profile';
@@ -42,33 +42,46 @@ export class UserProfile implements OnInit{
     Address: 'None'
   }
 
+  isAdmin: boolean = false;
+
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.user.token = params['id'];
       this.token = params['id'];
-    });
-    if(typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        const decodedToken: any = jwtDecode(token);
-        this.user.name = decodedToken.userName;
-        this.user.email = decodedToken.email;
-        this.email = decodedToken.email;
-        this.http.get<any>(`${this.API_URL}/get-user-details`, { params: {email: decodedToken.email} }).subscribe({
-          next: (res: any) => {
-            this.userdetails.phone = res.userDetails.phone || 'None';
-            this.userdetails.Address = res.userDetails.Address || 'None';
-            this.cd.detectChanges();
-          },
-          error: (error: any) => {
-            alert(`${error.error.message}`);
+
+      if (this.token) {
+        try {
+          const deCodedToken: any = jwtDecode(this.token);
+          this.user.name = deCodedToken.userName;
+          this.user.email = deCodedToken.email;
+          this.email = deCodedToken.email;
+          if (deCodedToken.isAdmin) {
+            this.isAdmin = true;
           }
-        })
+
+          this.http.get<any>(`${this.API_URL}/get-user-details`, {
+            params: { email: this.email }
+          }).subscribe({
+            next: (res: any) => {
+              this.userdetails.phone = res.userDetails.phone || 'None';
+              this.userdetails.Address = res.userDetails.Address || 'None';
+              this.cd.detectChanges();
+            },
+            error: (error: any) => {
+              alert(`${error.error.message}`);
+            }
+          });
+
+        } catch (err) {
+          console.error("Invalid token", err);
+          alert("Session expired or invalid token.");
+          this.router.navigate(['/']);
+        }
       }
-    }
+    });
   }
 
-  changePass(){
+  changePass() {
     this.http.post<any>(`${this.API_URL}/changepass`, {
       email: this.user.email,
       password: this.password,
@@ -81,6 +94,10 @@ export class UserProfile implements OnInit{
         alert(`${error.error.message}`);
       }
     });
+  }
+
+  navToAdminPage(){
+    this.router.navigate(['admin'], { queryParams: { id: this.token } });
   }
 
   toggleSidebar() {
@@ -102,25 +119,25 @@ export class UserProfile implements OnInit{
     }
   }
 
-  navToEdit(){
-    if(typeof window !== 'undefined'){
+  navToEdit() {
+    if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
-      if(token){
+      if (token) {
         const decodedToken: any = jwtDecode(token);
-        this.router.navigate(['/edit-profile'], {queryParams: {id: token}});
+        this.router.navigate(['/edit-profile'], { queryParams: { id: token } });
       }
     }
   }
 
-  logout(){
-    if(typeof window !== 'undefined'){
+  logout() {
+    if (typeof window !== 'undefined') {
       localStorage.clear();
       alert("Account Logout");
       this.router.navigate(['/']);
     }
   }
 
-  delUser(){
+  delUser() {
     localStorage.clear();
     this.http.post<any>(`${this.API_URL}/deluser`, {
       email: this.user.email
