@@ -3,6 +3,13 @@ const mongoose = require('mongoose');
 const userRouter = require('./router/userrouter'); // Import user router 
 const productRouter = require('./router/productrouter') ;
 const session = require('express-session');
+const fs = require('fs');
+
+// Make sure 'uploads' folder exists
+const dir = './uploads';
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
 
 const app = express();
 const PORT = 3000;
