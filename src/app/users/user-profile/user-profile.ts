@@ -28,6 +28,7 @@ export class UserProfile implements OnInit {
   API_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user';
 
   user: any = {
+    id: String,
     token: String,
     name: String,
     email: String
@@ -55,6 +56,7 @@ export class UserProfile implements OnInit {
           this.user.name = deCodedToken.userName;
           this.user.email = deCodedToken.email;
           this.email = deCodedToken.email;
+          this.user.id = deCodedToken.id;
           if (deCodedToken.isAdmin) {
             this.isAdmin = true;
           }

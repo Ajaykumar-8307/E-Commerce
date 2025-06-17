@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -11,34 +11,47 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   templateUrl: './product-list.html',
   styleUrls: ['./product-list.scss']
 })
-export class ProductList implements OnInit{
-
+export class ProductList implements OnInit {
   pro: any[] = [];
-
   API_Link = 'https://e-commerce-bmp5.onrender.com/api/v1/product';
-
-  constructor(private route: RouterModule, private http: HttpClient) {}
-
-  ngOnInit(): void {
-    this.http.get<any[]>(`${this.API_Link}/getproducts`).subscribe({
-      next: (data: any) => {
-        this.pro = data;
-      },
-      error: (error: any) => {
-      alert(`${error.error.message}`);
-      }
-    });
-  }
   demo_loc: string = '';
   selectedValue = '';
   location: string[] = ['Thanjavur', 'Trichy', 'Coimbatore', 'Kumbakkonam'];
   Filter: any[] = [];
   filter_price: string = '';
   searchTerm = '';
+
+  constructor(private http: HttpClient, private cd: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.fetchProducts();
+  }
+
+  fetchProducts() {
+    // Add cache-busting query parameter
+    this.http.get<any[]>(`${this.API_Link}/getproducts?_=${Date.now()}`).subscribe({
+      next: (data: any) => {
+        this.pro = data;
+        this.Filter = data; // Initialize Filter with all products
+        this.cd.detectChanges();
+      },
+      error: (error: any) => {
+        alert(error?.error?.message || 'Failed to fetch products');
+      }
+    });
+  }
+
   search() {
-    return this.Filter = this.pro.filter(product =>
-      product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) && 
-      product.location.toLowerCase().includes(this.demo_loc.toLowerCase())
+    this.Filter = this.pro.filter(product =>
+      product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) &&
+      (!this.demo_loc || product.location.toLowerCase().includes(this.demo_loc.toLowerCase()))
     );
+    return this.Filter;
+  }
+
+  onImageError(event: Event) {
+    console.error('Image failed to load:', (event.target as HTMLImageElement).src);
+    // Optional: Set a fallback image
+    (event.target as HTMLImageElement).src = 'assets/fallback-image.jpg';
   }
 }

@@ -45,4 +45,8 @@ export class AdminPage implements OnInit {
     }
   }
 
+  refresh(){
+    window.location.reload();
+  }
+
 }

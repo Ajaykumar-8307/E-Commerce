@@ -64,6 +64,10 @@ aside {
       }
     }
   }
+
+  a .svg-home svg {
+    fill: none;
+  }
 }
 
 @media (max-width: 1200px) {
@@ -79,6 +83,7 @@ aside {
     h2 {
       font-size: 1.5rem;
     }
+
     nav a {
       font-size: 0.9rem;
       padding: 8px 10px;
@@ -91,6 +96,7 @@ aside {
     transform: translateX(-100%);
     width: 200px;
   }
+
   aside.sidebar-open {
     transform: translateX(0);
   }
@@ -104,6 +110,7 @@ aside {
     h2 {
       font-size: 1.4rem;
     }
+
     nav a {
       font-size: 0.9rem;
     }
@@ -117,14 +124,17 @@ aside {
 
     h2 {
       font-size: 1.2rem;
+
       svg {
         width: 18px;
         height: 18px;
       }
     }
+
     nav a {
       font-size: 0.85rem;
       padding: 6px 8px;
+
       svg {
         width: 16px;
         height: 16px;

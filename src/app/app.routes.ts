@@ -13,6 +13,7 @@ import { Products } from './admin/admin-dashboard/products/products';
 import { Orders } from './admin/admin-dashboard/orders/orders';
 import { Settings } from './admin/admin-dashboard/settings/settings';
 import { AddProducts } from './admin/admin-dashboard/add-products/add-products';
+import { ProductDetails } from './products/product-details/product-details';
 
 export const routes: Routes = [
   { path: '', component: HomePage },         // default route 
@@ -22,9 +23,11 @@ export const routes: Routes = [
   { path: 'resendOtp', component: ResendOtpPage },
   { path: 'userprofile', component: UserProfile },
   { path: 'edit-profile', component: ProfileEdit },
+  { path: 'products', component: ProductDetails },
 
   //admin page
-  { path: 'admin', component: AdminPage, 
+  {
+    path: 'admin', component: AdminPage,
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: Dashboard },
@@ -33,7 +36,7 @@ export const routes: Routes = [
       { path: 'settings', component: Settings },
       { path: 'add-products', component: AddProducts }
     ]
-   }
+  }
 ];
 
 @NgModule({
