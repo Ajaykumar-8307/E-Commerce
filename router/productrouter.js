@@ -1,19 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const sharp = require('sharp');
 const { addProduct, getProducts, deleteProducts, getAdminProducts } = require('../controller/productcontroller');
 
 const storage = multer.memoryStorage();
-
 const upload = multer({ storage });
 
 router.post(
   '/addproducts',
   upload.fields([
     { name: 'productImage', maxCount: 1 },
-    { name: 'companyLogo', maxCount: 1 }
+    { name: 'companyLogo', maxCount: 1 },
   ]),
   addProduct
 );
