@@ -1,29 +1,38 @@
 const Product = require('../models/addProduct');
 const User = require('../models/User');
 const cloudinary = require('../config/cloudinary');
-const sharp = require('sharp');
 
 exports.addProduct = async (req, res) => {
   const { name, category, price, stocks, location, description, adminId } = req.body;
 
   try {
     const user = await User.findById(adminId);
-    if (!user || !user.isAdmin) {
-      return res.status(401).json({ message: "You are not authorized" });
+    if (!user) {
+      return res.status(500).json({ message: 'User Not Found' });
+    }
+    if (!user.isAdmin) {
+      return res.status(401).json({ message: 'You are not an admin. Create an admin account to sell products.' });
     }
 
-    const productBuffer = await sharp(req.files['productImage'][0].buffer).resize({ width: 800 }).jpeg({ quality: 70 }).toBuffer();
-    const logoBuffer = await sharp(req.files['companyLogo'][0].buffer).resize({ width: 400 }).jpeg({ quality: 70 }).toBuffer();
+    // Upload product image to Cloudinary
+    const productImageBuffer = req.files['productImage'][0].buffer;
+    const productImageUpload = await cloudinary.uploader.upload(
+      `data:image/jpeg;base64,${productImageBuffer.toString('base64')}`,
+      {
+        folder: 'products',
+        transformation: [{ width: 800, quality: 70, crop: 'scale' }],
+      }
+    );
 
-    const toBase64 = (buffer) => `data:image/jpeg;base64,${buffer.toString('base64')}`;
-
-    const productUpload = await cloudinary.uploader.upload(toBase64(productBuffer), {
-      folder: 'ecommerce/products',
-    });
-
-    const logoUpload = await cloudinary.uploader.upload(toBase64(logoBuffer), {
-      folder: 'ecommerce/logos',
-    });
+    // Upload company logo to Cloudinary
+    const logoBuffer = req.files['companyLogo'][0].buffer;
+    const logoImageUpload = await cloudinary.uploader.upload(
+      `data:image/jpeg;base64,${logoBuffer.toString('base64')}`,
+      {
+        folder: 'logos',
+        transformation: [{ width: 400, quality: 70, crop: 'scale' }],
+      }
+    );
 
     const product = await Product.create({
       name,
@@ -32,15 +41,15 @@ exports.addProduct = async (req, res) => {
       stocks,
       location,
       description,
-      image: productUpload.secure_url,
-      com_logo: logoUpload.secure_url,
+      image: productImageUpload.secure_url,
+      com_logo: logoImageUpload.secure_url,
       adminId,
     });
 
-    return res.status(200).json({ message: "Product Added Successfully", product });
+    return res.status(200).json({ message: 'Product Added Successfully', product });
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ message: "Error while adding product" });
+    return res.status(400).json({ message: 'Error while adding your product' });
   }
 };
 
@@ -49,7 +58,7 @@ exports.getProducts = async (req, res) => {
     const products = await Product.find();
     return res.status(200).json(products);
   } catch (error) {
-    return res.status(400).json({ message: "Failed to fetch products" });
+    return res.status(400).json({ message: 'error to fetch all products' });
   }
 };
 
@@ -59,7 +68,7 @@ exports.getAdminProducts = async (req, res) => {
     const products = await Product.find({ adminId });
     return res.status(200).json(products);
   } catch (error) {
-    return res.status(400).json({ message: "Failed to fetch admin products" });
+    return res.status(400).json({ message: 'Error to fetch your Products' });
   }
 };
 
@@ -68,12 +77,15 @@ exports.deleteProducts = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(id);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(500).json({ message: 'Product not found' });
     }
-    await cloudinary.uploader.destroy(product.image);
-    await cloudinary.uploader.destroy(product.com_logo);
-    return res.status(200).json({ message: "Product deleted successfully", product });
+    // Delete images from Cloudinary
+    const publicIdProduct = product.image.split('/').pop().split('.')[0];
+    const publicIdLogo = product.com_logo.split('/').pop().split('.')[0];
+    await cloudinary.uploader.destroy(`products/${publicIdProduct}`);
+    await cloudinary.uploader.destroy(`logos/${publicIdLogo}`);
+    return res.status(200).json({ message: 'Product Deleted Successfully', product });
   } catch (error) {
-    return res.status(400).json({ message: "Error deleting product" });
+    return res.status(400).json({ message: 'Error to Delete Product' });
   }
 };
