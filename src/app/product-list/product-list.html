@@ -25,20 +25,20 @@
     <ng-container *ngFor="let product of search()">
       <div class="product">
         <div class="pro-img">
-          <img [src]='product.pro_img' [class]="product.pro_name"/>
+          <img [src]='product.image' [class]="product.name"/>
         </div>
         <div class="com-logo">
           <img [src]='product.com_logo' />
         </div>
         <div class="pro-title">
-          <h1>{{product.pro_name}}</h1>
+          <h1>{{product.name}}</h1>
         </div>
         <div class="rate-loc">
           <div class="rate">
-            <span>Rs. {{product.pro_price}}</span>
+            <span>Rs. {{product.price}}</span>
           </div>
           <div class="loc">
-            <p>{{product.pro_loc}}</p>
+            <p>{{product.location}}</p>
           </div>
         </div>
         <div class="add-to-cart">

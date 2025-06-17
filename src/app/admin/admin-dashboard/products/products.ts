@@ -18,6 +18,7 @@ export class Products implements OnInit{
   API_Link = 'https://e-commerce-bmp5.onrender.com/api/v1/product';
   token: any;
   id: string = '';
+  pro_id: string = '';
 
   loading = true;
 
@@ -49,6 +50,22 @@ export class Products implements OnInit{
 
   navToAddProducts(){
     this.router.navigate(['/admin/add-products']);
+  }
+
+  delProducts(product: any){
+    console.log(`${product._id}`);
+    this.http.post(`${this.API_Link}/deleteproduct`, {
+      id: product._id
+    }).subscribe({
+      next: (res: any) => {
+        alert(`${res.message}`);
+        window.location.reload();
+      },
+      error: (error: any) => {
+        alert(`${error.error.message}`);
+        console.log("Error");
+      }
+    });
   }
 
 }
