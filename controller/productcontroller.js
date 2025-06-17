@@ -4,7 +4,6 @@ const cloudinary = require('../config/cloudinary');
 
 exports.addProduct = async (req, res) => {
   const { name, category, price, stocks, location, description, adminId } = req.body;
-
   try {
     const user = await User.findById(adminId);
     if (!user) {
@@ -45,7 +44,6 @@ exports.addProduct = async (req, res) => {
       com_logo: logoImageUpload.secure_url,
       adminId,
     });
-
     return res.status(200).json({ message: 'Product Added Successfully', product });
   } catch (error) {
     console.error(error);
