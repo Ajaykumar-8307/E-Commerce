@@ -132,7 +132,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding: 0px;
+  padding: 20px;
   order: 2;
 }
 
@@ -308,7 +308,7 @@ main {
   .product-details {
     flex-direction: column;
     gap: 20px;
-    padding: 15px;
+    padding: 0px;
   }
 
   .image-section,
@@ -337,6 +337,10 @@ main {
 
 @media (max-width: 480px) {
   main {
+  }
+
+  .info-section{
+    padding: 20px;
   }
 
   .info-section h1 {
