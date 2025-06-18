@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { ChangeDetectorRef } from '@angular/core';
+import { environment } from '../../../environments/environments.prod';
 
 @Component({
   selector: 'app-profile-edit',
@@ -23,7 +24,7 @@ export class ProfileEdit implements OnInit{
 
   isSidebarOpen = false;
 
-  API_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user'
+  API_URL = environment.apiUrl;
 
   user = {
     name: '',
@@ -47,7 +48,7 @@ export class ProfileEdit implements OnInit{
         this.user.email = decodedToken.email;
         this.email = decodedToken.email;
       }
-      this.http.get<any>(`${this.API_URL}/get-user-details`, { params: { email: this.user.email } }).subscribe({
+      this.http.get<any>(`${this.API_URL}/user/get-user-details`, { params: { email: this.user.email } }).subscribe({
         next: (res: any) => {
           this.user.phone = res.userDetails.phone;
           this.user.Address = res.userDetails.Address;

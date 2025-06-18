@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environments.prod';
 
 @Component({
   selector: 'app-login-page',
@@ -13,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class LoginPage {
 
-  Api_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user/login';
+  Api_URL = environment.apiUrl;
   user = {
     email: '',
     password: ''
@@ -24,7 +25,7 @@ export class LoginPage {
   constructor(private router: Router, private http: HttpClient) {}
 
   submit(){
-    this.http.post<any>(this.Api_URL, this.user).subscribe(
+    this.http.post<any>(`${this.Api_URL}/user/login`, this.user).subscribe(
       {
         next: (res: any) => {
           alert('Login successful');

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../../../environments/environments.prod';
 
 @Component({
   selector: 'app-products',
@@ -15,7 +16,7 @@ export class Products implements OnInit {
 
   products: any[] = [];
 
-  API_Link = 'https://e-commerce-bmp5.onrender.com/api/v1/product';
+  API_Link = environment.apiUrl;
   token: any;
   id: string = '';
   pro_id: string = '';
@@ -33,7 +34,7 @@ export class Products implements OnInit {
         console.log(this.id);
         this.cd.detectChanges();
       }
-      this.http.get<any[]>(`${this.API_Link}/adminproducts`, { params: { adminId: this.id } }).subscribe({
+      this.http.get<any[]>(`${this.API_Link}/product/adminproducts`, { params: { adminId: this.id } }).subscribe({
         next: (res: any) => {
           this.products = res;
           console.log(res);
@@ -55,7 +56,7 @@ export class Products implements OnInit {
   delProducts(product: any) {
     if (typeof window !== 'undefined') {
       console.log(`${product._id}`);
-      this.http.post(`${this.API_Link}/deleteproduct`, {
+      this.http.post(`${this.API_Link}/product/deleteproduct`, {
         id: product._id
       }).subscribe({
         next: (res: any) => {

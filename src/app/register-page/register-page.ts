@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environments.prod';
 
 @Component({
   selector: 'app-register-page',
@@ -21,12 +22,12 @@ export class RegisterPage {
     password: '',
     isAdmin: false
   };
-  Api_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user/register';
+  Api_URL = environment.apiUrl;
   message: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}
   submit() {
-    this.http.post<any>(this.Api_URL, this.user).subscribe({
+    this.http.post<any>(`${this.Api_URL}/user/register`, this.user).subscribe({
       next: (res: any) => {
         alert('Registration successful');
         console.log('Registration successful', res);

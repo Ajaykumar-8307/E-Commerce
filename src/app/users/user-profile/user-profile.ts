@@ -7,6 +7,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { error } from 'console';
 import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 import { ChangeDetectorRef } from '@angular/core';
+import { environment } from '../../../environments/environments.prod';
 
 @Component({
   selector: 'app-user-profile',
@@ -25,7 +26,7 @@ export class UserProfile implements OnInit {
 
   isSidebarOpen = false;
   activeLink = 'profile';
-  API_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user';
+  API_URL = environment.apiUrl;
 
   user: any = {
     id: String,
@@ -61,7 +62,7 @@ export class UserProfile implements OnInit {
             this.isAdmin = true;
           }
 
-          this.http.get<any>(`${this.API_URL}/get-user-details`, {
+          this.http.get<any>(`${this.API_URL}/user/get-user-details`, {
             params: { email: this.email }
           }).subscribe({
             next: (res: any) => {
@@ -84,7 +85,7 @@ export class UserProfile implements OnInit {
   }
 
   changePass() {
-    this.http.post<any>(`${this.API_URL}/changepass`, {
+    this.http.post<any>(`${this.API_URL}/user/changepass`, {
       email: this.user.email,
       password: this.password,
       newpass: this.newpass
@@ -141,7 +142,7 @@ export class UserProfile implements OnInit {
 
   delUser() {
     localStorage.clear();
-    this.http.post<any>(`${this.API_URL}/deluser`, {
+    this.http.post<any>(`${this.API_URL}/user/deluser`, {
       email: this.user.email
     }).subscribe({
       next: (res: any) => {

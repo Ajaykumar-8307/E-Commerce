@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environments/environments.prod';
 
 @Component({
   selector: 'app-product-list',
@@ -13,7 +14,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 })
 export class ProductList implements OnInit {
   pro: any[] = [];
-  API_Link = 'https://e-commerce-bmp5.onrender.com/api/v1/product';
+  API_Link = environment.apiUrl;
   demo_loc: string = '';
   selectedValue = '';
   location: string[] = ['Thanjavur', 'Trichy', 'Coimbatore', 'Kumbakkonam'];
@@ -29,7 +30,7 @@ export class ProductList implements OnInit {
 
   fetchProducts() {
     // Add cache-busting query parameter
-    this.http.get<any[]>(`${this.API_Link}/getproducts?_=${Date.now()}`).subscribe({
+    this.http.get<any[]>(`${this.API_Link}/product/getproducts?_=${Date.now()}`).subscribe({
       next: (data: any) => {
         this.pro = data;
         this.Filter = data; // Initialize Filter with all products

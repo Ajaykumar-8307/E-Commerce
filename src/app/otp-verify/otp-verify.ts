@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environments.prod';
 
 @Component({
   selector: 'app-otp-verify',
@@ -13,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
   styleUrl: './otp-verify.scss'
 })
 export class OtpVerify implements OnInit {
-  Api_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user/verify';
+  Api_URL = environment.apiUrl;
   verify = {
     email: '',
     otp: ''
@@ -31,7 +32,7 @@ export class OtpVerify implements OnInit {
   }
 
   verifi(){
-    this.http.post<any>(this.Api_URL, this.verify).subscribe({
+    this.http.post<any>(`${this.Api_URL}/user/verify`, this.verify).subscribe({
       next: (res: any) => {
         alert("Verification Successful");
         console.log('Verification successful', res.email);
@@ -45,7 +46,7 @@ export class OtpVerify implements OnInit {
   }
 
   resentOtp(){
-    this.http.post<any>('https://e-commerce-bmp5.onrender.com/api/v1/user/resendotp', { email: this.verify.email }).subscribe({
+    this.http.post<any>(`${this.Api_URL}/user/resendotp`, { email: this.verify.email }).subscribe({
       next: (res: any) => {
         alert("OTP Resent Successfully");
         console.log('OTP resent successfully', res);

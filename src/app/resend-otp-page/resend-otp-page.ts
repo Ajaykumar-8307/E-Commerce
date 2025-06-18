@@ -3,6 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environments.prod';
 
 @Component({
   selector: 'app-resend-otp-page',
@@ -17,10 +18,10 @@ export class ResendOtpPage {
 
   email = '';
 
-  API_URL = 'https://e-commerce-bmp5.onrender.com/api/v1/user/resendotp';
+  API_URL = environment.apiUrl;
 
   resendOtp(){
-    this.http.post<any>(this.API_URL, {
+    this.http.post<any>(`${this.API_URL}/user/resendotp`, {
       email: this.email
     }).subscribe({
       next: (res: any) => {

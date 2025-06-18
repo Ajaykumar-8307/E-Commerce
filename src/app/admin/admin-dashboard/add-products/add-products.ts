@@ -3,6 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../../../environments/environments.prod';
 
 @Component({
   selector: 'app-add-products',
@@ -12,7 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class AddProducts implements OnInit {
 
-  API_Link = 'https://e-commerce-bmp5.onrender.com/api/v1/product'
+  API_Link = environment.apiUrl;
 
   product: any = {
     name: '',
@@ -59,7 +60,7 @@ export class AddProducts implements OnInit {
     if (this.productImage) formData.append('productImage', this.productImage);
     if (this.companyLogo) formData.append('companyLogo', this.companyLogo);
 
-    this.http.post(`${this.API_Link}/addproducts`, formData).subscribe({
+    this.http.post(`${this.API_Link}/product/addproducts`, formData).subscribe({
       next: (res: any) => {
         alert('Product added successfully');
         this.product = {};
