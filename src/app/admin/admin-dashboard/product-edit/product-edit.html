@@ -1,0 +1,56 @@
+<h3>Edit Your Product Details</h3><br>
+<form>
+  <div class="form-group">
+    <label>Product Name</label>
+    <input type="text" name="name" [value]="product.name" placeholder="Enter product name">
+  </div>
+
+  <div class="form-group">
+    <label>Category</label>
+    <select name="category">
+      <option value="" disabled selected>Select a category</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Home & Garden">Home & Garden</option>
+      <option value="Toys & Games">Toys & Games</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Price</label>
+    <input type="text" name="price" placeholder="Enter price">
+  </div>
+
+  <div class="form-group">
+    <label>Stock</label>
+    <input type="number" name="stocks" placeholder="Enter stock quantity">
+  </div>
+
+  <div class="form-group">
+    <label>Location</label>
+    <select name="location">
+      <option value="" disabled selected>Select a location</option>
+      <option value="Thanjavur">Thanjavur</option>
+      <option value="Trichy">Trichy</option>
+      <option value="Coimbatore">Coimbatore</option>
+      <option value="kumbakkonam">Kumbakkonam</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Description</label>
+    <textarea name="description" placeholder="Enter product description"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>Product Image</label>
+    <input type="file" id="productImage" accept="image/*">
+  </div>
+
+  <div class="form-group">
+    <label>Company Logo</label>
+    <input type="file" id="companyLogo" accept="image/*">
+  </div>
+
+  <button type="submit">Add Product</button>
+</form>

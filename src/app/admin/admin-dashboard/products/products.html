@@ -25,7 +25,7 @@
                     <td data-label="Price">{{p.price}}</td>
                     <td data-label="Stock">{{p.stocks}}</td>
                     <td data-label="Actions">
-                        <button class="action-btn edit-btn">Edit</button>
+                        <button class="action-btn edit-btn" (click)="editProduct(p)">Edit</button>
                         <button class="action-btn delete-btn" (click)="delProducts(p)">Delete</button>
                     </td>
                 </tr>

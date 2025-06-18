@@ -14,6 +14,7 @@ import { Orders } from './admin/admin-dashboard/orders/orders';
 import { Settings } from './admin/admin-dashboard/settings/settings';
 import { AddProducts } from './admin/admin-dashboard/add-products/add-products';
 import { ProductDetails } from './products/product-details/product-details';
+import { ProductEdit } from './admin/admin-dashboard/product-edit/product-edit';
 
 export const routes: Routes = [
   { path: '', component: HomePage },         // default route 
@@ -34,7 +35,8 @@ export const routes: Routes = [
       { path: 'products', component: Products },
       { path: 'orders', component: Orders },
       { path: 'settings', component: Settings },
-      { path: 'add-products', component: AddProducts }
+      { path: 'add-products', component: AddProducts },
+      { path: 'edit-product', component: ProductEdit }
     ]
   }
 ];

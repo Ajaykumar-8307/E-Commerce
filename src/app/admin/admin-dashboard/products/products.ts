@@ -31,7 +31,6 @@ export class Products implements OnInit {
       if (this.token) {
         const deCodedToken: any = jwtDecode(this.token);
         this.id = deCodedToken.id;
-        console.log(this.id);
         this.cd.detectChanges();
       }
       this.http.get<any[]>(`${this.API_Link}/product/adminproducts`, { params: { adminId: this.id } }).subscribe({
@@ -51,6 +50,10 @@ export class Products implements OnInit {
 
   navToAddProducts() {
     this.router.navigate(['/admin/add-products']);
+  }
+
+  editProduct(product: any){
+    this.router.navigate(['/admin/edit-product'], { queryParams: { id: product._id } });
   }
 
   delProducts(product: any) {
