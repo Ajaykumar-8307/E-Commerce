@@ -64,7 +64,7 @@ export class ProfileEdit implements OnInit{
 
   OnSubmit(){
     if(this.user){
-      this.http.put<any>(this.API_URL+'/update-profile', this.user).subscribe({
+      this.http.put<any>(`${this.API_URL}/user/update-profile`, this.user).subscribe({
         next: (res: any) => {
           alert(`${res.message}`);
         },
