@@ -9,10 +9,7 @@ const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
-app.use(cors({
-  origin: ['http://localhost:4200', 'https://your-angular-app-domain.com'],
-  credentials: true,
-}));
+app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
