@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const { addProduct, getProducts, deleteProducts, getAdminProducts, editProducts } = require('../controller/productcontroller');
+const { addProduct, getProducts, deleteProducts, getAdminProducts, updateProduct } = require('../controller/productcontroller');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -16,7 +16,14 @@ router.post(
 );
 router.post('/deleteproduct', deleteProducts);
 
-router.post('/editproducts', editProducts);
+router.post(
+  '/updateproduct',
+  upload.fields([
+    { name: 'productImage', maxCount: 1 },
+    { name: 'companyLogo', maxCount: 1 },
+  ]),
+  updateProduct
+);
 
 router.get('/getproducts', getProducts);
 router.get('/adminproducts', getAdminProducts);

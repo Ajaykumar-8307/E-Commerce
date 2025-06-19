@@ -60,15 +60,54 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-exports.editProducts = async (req, res) => {
-  const { id } = req.body;
-  try{
-    const product = await Product.findById(id);
-    return res.status(200).json(product);
+exports.updateProduct = async (req, res) => {
+  const { id, name, category, price, stocks, location, description } = req.body;
+  try {
+    const updateData = {
+      name,
+      category,
+      price,
+      stocks,
+      location,
+      description,
+    };
+
+    // Optional: handle updated images
+    if (req.files && req.files['productImage']) {
+      const productImageBuffer = req.files['productImage'][0].buffer;
+      const productImageUpload = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${productImageBuffer.toString('base64')}`,
+        {
+          folder: 'products',
+          transformation: [{ width: 800, quality: 70, crop: 'scale' }],
+        }
+      );
+      updateData.image = productImageUpload.secure_url;
+    }
+
+    if (req.files && req.files['companyLogo']) {
+      const logoBuffer = req.files['companyLogo'][0].buffer;
+      const logoImageUpload = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${logoBuffer.toString('base64')}`,
+        {
+          folder: 'logos',
+          transformation: [{ width: 400, quality: 70, crop: 'scale' }],
+        }
+      );
+      updateData.com_logo = logoImageUpload.secure_url;
+    }
+
+    const product = await Product.findByIdAndUpdate(id, updateData, { new: true });
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    return res.status(200).json({ message: 'Product updated successfully', product });
   } catch (error) {
-    return res.status(400).json({message: "Error to fetch Data"});
+    console.error(error);
+    return res.status(500).json({ message: 'Error updating product' });
   }
-}
+};
 
 exports.getAdminProducts = async (req, res) => {
   const { adminId } = req.query;
