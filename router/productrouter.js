@@ -15,7 +15,8 @@ router.post(
   addProduct
 );
 router.post('/deleteproduct', deleteProducts);
-router.post('/editproducts', editProducts);
+
+router.put('/editproducts', editProducts);
 
 router.get('/getproducts', getProducts);
 router.get('/adminproducts', getAdminProducts);
