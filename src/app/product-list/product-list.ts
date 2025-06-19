@@ -65,4 +65,8 @@ export class ProductList implements OnInit {
   navToDetails(product: any){
     this.router.navigate(['/products'], { queryParams: { id: product._id } });
   }
+
+  print(){
+    console.log("Hello");
+  }
 }

@@ -12,7 +12,8 @@
     </div>
     <div class="search-container">
       <div class="search-int">
-        <input type="text" [(ngModel)]="searchTerm" class="search-input" placeholder="Search items" (input)="search()" />
+        <input type="text" [(ngModel)]="searchTerm" class="search-input" placeholder="Search items"
+          (input)="search()" />
         <div class="dec-line"></div>
       </div>
     </div>
@@ -23,7 +24,8 @@
 </div>
 <div class="product-container">
   <ng-container *ngFor="let product of Filter">
-    <a style="cursor: pointer;" (click)="navToDetails(product)"><div class="product">
+    <div class="product">
+      <a style="cursor: pointer;" (click)="navToDetails(product)">
       <div class="pro-img">
         <img [src]="product.image" [alt]="product.name" (error)="onImageError($event)" loading="lazy" />
       </div>
@@ -40,10 +42,10 @@
         <div class="loc">
           <p>{{product.location}}</p>
         </div>
-      </div>
+      </div></a>
       <div class="add-to-cart">
-        <button>Add to Cart</button>
+        <button (click)="print()">Add to Cart</button>
       </div>
-    </div></a>
+    </div>
   </ng-container>
 </div>
