@@ -23,7 +23,7 @@
 </div>
 <div class="product-container">
   <ng-container *ngFor="let product of Filter">
-    <div class="product">
+    <a style="cursor: pointer;" (click)="navToDetails(product)"><div class="product">
       <div class="pro-img">
         <img [src]="product.image" [alt]="product.name" (error)="onImageError($event)" loading="lazy" />
       </div>
@@ -44,6 +44,6 @@
       <div class="add-to-cart">
         <button>Add to Cart</button>
       </div>
-    </div>
+    </div></a>
   </ng-container>
 </div>

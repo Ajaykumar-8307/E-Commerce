@@ -2,13 +2,13 @@
 <main class="container">
   <section class="product-card">
     <div class="date-time">
-      Wednesday, June 18, 2025, 01:32 PM IST
+      {{product.createdAt}}
     </div>
 
     <div class="product-details">
       <div class="image-section">
         <img class="product-image"
-          src="https://www.stuff.tv/wp-content/uploads/sites/2/2024/08/Best-Gaming-Consoles-Hero-Image.jpg"
+          [src]="product.image"
           alt="Gaming Console" />
         <div class="image-overlay">
           <span class="active"></span>
@@ -18,9 +18,9 @@
       </div>
 
       <div class="info-section">
-        <h1>Console</h1>
-        <p class="price">₹220</p>
-        <p class="stock in-stock">In Stock: 25</p>
+        <h1>{{product.name}}</h1>
+        <p class="price">{{product.price}}</p>
+        <p class="stock in-stock">In Stock: {{product.stocks}}</p>
 
         <div class="action-buttons">
           <button class="buy-now-btn">
@@ -34,9 +34,9 @@
         </div>
 
         <div class="details-list">
-          <p><span class="label">Product ID:</span> 110</p>
-          <p><span class="label">Category:</span> Electronics</p>
-          <p><span class="label">Location:</span> Thanjavur</p>
+          <p><span class="label">Product ID:</span> {{product._id}}</p>
+          <p><span class="label">Category:</span> {{product.category}}</p>
+          <p><span class="label">Location:</span> {{product.location}}</p>
           <p>
             <span class="label">3D Model:</span>
             <button class="view-3d-btn">View in 3D</button>
@@ -47,10 +47,7 @@
 
     <div class="description-section">
       <h2>Description</h2>
-      <p>
-        The next-gen gaming console offering lightning-fast load times, rich graphics, and immersive gameplay.
-        Includes built-in support for streaming, expandable storage, and ergonomic controller design.
-      </p>
+      <p>{{product.description}}</p>
     </div>
   </section>
 </main>

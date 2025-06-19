@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environments.prod';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +23,12 @@ export class ProductList implements OnInit {
   filter_price: string = '';
   searchTerm = '';
 
-  constructor(private http: HttpClient, private cd: ChangeDetectorRef) {}
+  constructor(
+    private http: HttpClient,
+    private cd: ChangeDetectorRef,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -54,5 +60,9 @@ export class ProductList implements OnInit {
     console.error('Image failed to load:', (event.target as HTMLImageElement).src);
     // Optional: Set a fallback image
     (event.target as HTMLImageElement).src = 'assets/fallback-image.jpg';
+  }
+
+  navToDetails(product: any){
+    this.router.navigate(['/products'], { queryParams: { id: product._id } });
   }
 }
