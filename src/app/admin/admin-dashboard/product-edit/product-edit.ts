@@ -1,30 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environments.prod';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ChangeDetectorRef } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-product-edit',
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, FormsModule],
   templateUrl: './product-edit.html',
   styleUrl: './product-edit.scss'
 })
 export class ProductEdit implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private cd: ChangeDetectorRef,
+    private location: Location
+  ) {}
 
-  pro_id: String = '';
+  pro_id: string = '';
 
-  product: any = {
-    name: '',
-    category: '',
-    price: '',
-    stocks: '',
-    location: '',
-    description: '',
-    adminId: ''
-  };
+  product: any = {};
+
+  productImage: File | null = null;
+  companyLogo: File | null = null;
 
   API_Link = environment.apiUrl;
 
@@ -35,16 +39,51 @@ export class ProductEdit implements OnInit {
         console.log(this.pro_id);
       });
 
-      this.http.post(`${this.API_Link}/product/editproducts`, {
-        id: this.pro_id
-      }).subscribe({
-        next: (res: any) => {
-          this.product.name = res.name;
-        },
-        error: (error: any) => {
-          alert(`${error.error.message}`);
-        }
-      });
+      this.http.post(`${this.API_Link}/product/updateproduct`, { id: this.pro_id })
+        .subscribe((res: any) => {
+          this.product = res.product;
+          console.log(res.product);
+          this.cd.detectChanges();
+        });
     }
+  }
+
+  onFileChange(event: any, type: 'product' | 'logo') {
+    const file = event.target.files[0];
+    if (type === 'product') this.productImage = file;
+    if (type === 'logo') this.companyLogo = file;
+  }
+
+  onUpdateProduct() {
+    const formData = new FormData();
+    formData.append('id', this.pro_id); 
+    for (const key in this.product) {
+      if (this.product[key] !== undefined && this.product[key] !== null) {
+        formData.append(key, this.product[key]);
+      }
+    }
+
+    if (this.productImage) {
+      formData.append('productImage', this.productImage);
+    }
+
+    if (this.companyLogo) {
+      formData.append('companyLogo', this.companyLogo);
+    }
+
+    this.http.post(`${this.API_Link}/product/updateproduct`, formData).subscribe({
+      next: (res: any) => {
+        alert(`${res.message}`);
+        this.goback();
+      },
+      error: (err) => {
+        alert(`${err.error.message}`);
+        console.error(err);
+      },
+    });
+  }
+
+  goback(){
+    this.location.back();
   }
 }
