@@ -49,6 +49,17 @@ form {
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    .pre_image{
+        width: 55px;
+        height: 55px;
+
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
 }
 
 label {

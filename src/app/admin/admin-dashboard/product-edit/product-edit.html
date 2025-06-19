@@ -45,13 +45,20 @@
   <div class="form-group">
     <label>Product Image</label>
     <input type="file" id="productImage" (change)="onFileChange($event, 'product')" />
+    Previous Image
+    <div class="pre_image">
+      <img [src]="product.image"/>
+    </div>
   </div>
 
   <div class="form-group">
     <label>Company Logo</label>
     <input type="file" id="companyLogo" (change)="onFileChange($event, 'logo')" />
+    Previous Image
+    <div class="pre_image">
+      <img [src]="product.com_logo"/>
+    </div>
   </div>
 
-  <img [src]="product.image" />
   <button type="submit">Update Product</button>
 </form>
