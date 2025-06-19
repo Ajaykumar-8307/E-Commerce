@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environments.prod';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-product-details',
@@ -18,7 +19,8 @@ export class ProductDetails implements OnInit{
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private cd: ChangeDetectorRef
   ){}
 
   API_Link = environment.apiUrl;
@@ -34,6 +36,7 @@ export class ProductDetails implements OnInit{
     this.http.get<any[]>(`${this.API_Link}/product/pro-details`, { params: { id: this.id } }).subscribe({
       next: (res: any) => {
         this.product = res;
+        this.cd.detectChanges();
         console.log(res);
       }
     });
