@@ -6,6 +6,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { ChangeDetectorRef } from '@angular/core';
 import { environment } from '../../../environments/environments.prod';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profile-edit',
@@ -19,7 +20,8 @@ export class ProfileEdit implements OnInit{
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private location: Location
   ){}
 
   isSidebarOpen = false;
@@ -67,6 +69,7 @@ export class ProfileEdit implements OnInit{
       this.http.put<any>(`${this.API_URL}/user/update-profile`, this.user).subscribe({
         next: (res: any) => {
           alert(`${res.message}`);
+          this.location.back();
         },
         error: (error: any) => {
           alert(`${error.error.message}`);
