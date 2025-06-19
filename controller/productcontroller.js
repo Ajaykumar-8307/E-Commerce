@@ -61,7 +61,7 @@ exports.getProducts = async (req, res) => {
 };
 
 exports.getOneProduct = async(req, res) => {
-  const { id } = req.body;
+  const { id } = req.query;
   try{
     const product = await Product.findById(id);
     return res.status(200).json(product);
