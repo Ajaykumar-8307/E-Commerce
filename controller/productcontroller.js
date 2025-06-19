@@ -60,6 +60,16 @@ exports.getProducts = async (req, res) => {
   }
 };
 
+exports.getOneProduct = async(req, res) => {
+  const { id } = req.body;
+  try{
+    const product = await Product.findById(id);
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(400).json({message: "Error To Get Details, Try Again Later"});
+  }
+}
+
 exports.updateProduct = async (req, res) => {
   const { id, name, category, price, stocks, location, description } = req.body;
   try {
