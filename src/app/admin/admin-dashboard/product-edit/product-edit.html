@@ -1,13 +1,13 @@
 <h3>Edit Your Product Details</h3><br>
-<form>
+<form (ngSubmit)="onUpdateProduct()">
   <div class="form-group">
     <label>Product Name</label>
-    <input type="text" name="name" [value]="product.name" placeholder="Enter product name">
+    <input type="text" name="name" [(ngModel)]="product.name" placeholder="Enter the Product Name">
   </div>
 
   <div class="form-group">
     <label>Category</label>
-    <select name="category">
+    <select name="category" [(ngModel)]="product.category">
       <option value="" disabled selected>Select a category</option>
       <option value="Electronics">Electronics</option>
       <option value="Clothing">Clothing</option>
@@ -18,17 +18,17 @@
 
   <div class="form-group">
     <label>Price</label>
-    <input type="text" name="price" placeholder="Enter price">
+    <input type="text" [(ngModel)]="product.price" name="price" placeholder="Enter price">
   </div>
 
   <div class="form-group">
     <label>Stock</label>
-    <input type="number" name="stocks" placeholder="Enter stock quantity">
+    <input type="number" [(ngModel)]="product.stocks" name="stocks" placeholder="Enter stock quantity">
   </div>
 
   <div class="form-group">
     <label>Location</label>
-    <select name="location">
+    <select name="location" [(ngModel)]="product.location">
       <option value="" disabled selected>Select a location</option>
       <option value="Thanjavur">Thanjavur</option>
       <option value="Trichy">Trichy</option>
@@ -39,18 +39,18 @@
 
   <div class="form-group">
     <label>Description</label>
-    <textarea name="description" placeholder="Enter product description"></textarea>
+    <textarea name="description" [(ngModel)]="product.description" placeholder="Enter product description"></textarea>
   </div>
 
   <div class="form-group">
     <label>Product Image</label>
-    <input type="file" id="productImage" accept="image/*">
+    <input type="file" id="productImage" (change)="onFileChange($event, 'product')" />
   </div>
 
   <div class="form-group">
     <label>Company Logo</label>
-    <input type="file" id="companyLogo" accept="image/*">
+    <input type="file" id="companyLogo" (change)="onFileChange($event, 'logo')" />
   </div>
 
-  <button type="submit">Add Product</button>
+  <button type="submit">Update Product</button>
 </form>
