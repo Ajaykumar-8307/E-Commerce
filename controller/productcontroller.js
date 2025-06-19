@@ -61,13 +61,9 @@ exports.getProducts = async (req, res) => {
 };
 
 exports.editProducts = async (req, res) => {
-  const { id, name, category, price, stocks, location, description  } = req.body;
+  const { id } = req.body;
   try{
-    const product = await Product.findByIdAndUpdate(
-      {id},
-      { name, category, price, stocks, location, description },
-      { new: true, runValidators: true }
-    );
+    const product = await Product.findById(id);
     return res.status(200).json(product);
   } catch (error) {
     return res.status(400).json({message: "Error to fetch Data"});
