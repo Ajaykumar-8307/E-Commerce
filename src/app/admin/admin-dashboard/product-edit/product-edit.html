@@ -1,5 +1,5 @@
 <h3>Edit Your Product Details</h3><br>
-<form (ngSubmit)="onUpdateProduct()">
+< (ngSubmit)="onUpdateProduct()">
   <div class="form-group">
     <label>Product Name</label>
     <input type="text" name="name" [(ngModel)]="product.name" placeholder="Enter the Product Name">
@@ -52,5 +52,6 @@
     <input type="file" id="companyLogo" (change)="onFileChange($event, 'logo')" />
   </div>
 
+  <img [src]="product.image" />
   <button type="submit">Update Product</button>
 </form>
