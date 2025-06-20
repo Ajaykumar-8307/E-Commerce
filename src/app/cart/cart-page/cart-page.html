@@ -7,7 +7,7 @@
     <div class="left-side">
       <div class="cart-items">
         <div class="cart-item" *ngFor="let item of cartItems">
-          <img [src]="item.image" alt="Product Image" />
+          <img [src]="item.image" [alt]="item.name" />
           <div class="item-details">
             <h2>{{ item.name }}</h2>
             <div class="item-info">

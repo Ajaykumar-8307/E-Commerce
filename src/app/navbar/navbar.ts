@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
 @Component({
@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class Navbar implements OnInit {
 
-  constructor(private route: Router){}
+  constructor(private router: Router, private route: ActivatedRoute){}
   selectedValue = '';
   location: string[] = ['Thanjavur', 'Trichy', 'Coimbatore', 'Kumbakkonam'];
   categories: string[] = ['Food', 'Electronics', 'Dress', 'FootWear'];
@@ -49,8 +49,12 @@ export class Navbar implements OnInit {
       const token = localStorage.getItem('token');
       if(token){
         const decodedToken: any = jwtDecode(token);
-        this.route.navigate(['/userprofile'], {queryParams: {id: token}});
+        this.router.navigate(['/userprofile'], {queryParams: {id: token}});
       }
     }
+  }
+
+  navToCart(){
+    this.router.navigate(['/cart']);
   }
 }

@@ -1,32 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../../navbar/navbar';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../../environments/environments.prod';
 
 @Component({
   selector: 'app-cart-page',
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule, Navbar, HttpClientModule],
   templateUrl: './cart-page.html',
   styleUrl: './cart-page.scss'
 })
-export class CartPage {
+export class CartPage implements OnInit{
 
-  cartItems = [
-    {
-      name: "Men's Casual Shirt",
-      price: 999,
-      quantity: 1,
-      image: 'https://res.cloudinary.com/djrnozthb/image/upload/v1750328005/products/tqis0hh8wuyis4uuldxi.jpg'
-    },
-    {
-      name: "Women's Sneakers",
-      price: 1499,
-      quantity: 1,
-      image: 'https://res.cloudinary.com/djrnozthb/image/upload/v1750328005/products/tqis0hh8wuyis4uuldxi.jpg'
-    }
-  ];
+  constructor(private http: HttpClient){}
 
+  API_Link = environment.apiUrl;
+  cartItems: any[] = [];
   quantities = [1, 2, 3];
+
+  ngOnInit(): void {
+    this.http.get<any[]>(`${this.API_Link}/product/getproducts`).subscribe({
+      next: (res: any) => {
+        this.cartItems = res;
+      },
+      error: (error: any) => {
+        alert(`${error.error.message}`);
+      }
+    });
+    this.getTotal();
+  }
+
   couponCode = '';
 
   getTotal(): number {
