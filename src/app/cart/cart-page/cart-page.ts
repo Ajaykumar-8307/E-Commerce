@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Navbar } from '../../navbar/navbar';
 
 @Component({
   selector: 'app-cart-page',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './cart-page.html',
   styleUrl: './cart-page.scss'
 })
