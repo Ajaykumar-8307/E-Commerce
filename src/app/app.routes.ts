@@ -15,6 +15,7 @@ import { Settings } from './admin/admin-dashboard/settings/settings';
 import { AddProducts } from './admin/admin-dashboard/add-products/add-products';
 import { ProductDetails } from './products/product-details/product-details';
 import { ProductEdit } from './admin/admin-dashboard/product-edit/product-edit';
+import { CartPage } from './cart/cart-page/cart-page';
 
 export const routes: Routes = [
   { path: '', component: HomePage },         // default route 
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'userprofile', component: UserProfile },
   { path: 'edit-profile', component: ProfileEdit },
   { path: 'products', component: ProductDetails },
+  { path: 'cart', component: CartPage },
 
   //admin page
   {
