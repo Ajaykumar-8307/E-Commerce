@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Navbar } from '../../navbar/navbar';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../../environments/environments.prod';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-cart-page',
@@ -11,9 +12,9 @@ import { environment } from '../../../environments/environments.prod';
   templateUrl: './cart-page.html',
   styleUrl: './cart-page.scss'
 })
-export class CartPage implements OnInit{
+export class CartPage implements OnInit {
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private cd: ChangeDetectorRef) { }
 
   API_Link = environment.apiUrl;
   cartItems: any[] = [];
@@ -22,7 +23,11 @@ export class CartPage implements OnInit{
   ngOnInit(): void {
     this.http.get<any[]>(`${this.API_Link}/product/getproducts`).subscribe({
       next: (res: any) => {
-        this.cartItems = res;
+        this.cartItems = res.map((item: any) => ({
+          ...item,
+          quantity: 1
+        }));
+        this.cd.detectChanges();
       },
       error: (error: any) => {
         alert(`${error.error.message}`);
