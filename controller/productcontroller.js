@@ -3,35 +3,63 @@ const User = require('../models/User');
 const cloudinary = require('../config/cloudinary');
 
 exports.addProduct = async (req, res) => {
-  const { name, category, price, stocks, location, description, adminId } = req.body;
+  const {
+    name,
+    category,
+    price,
+    stocks,
+    location,
+    description,
+    adminId,
+    productImageUrl,
+    companyLogoUrl
+  } = req.body;
+
   try {
     const user = await User.findById(adminId);
     if (!user) {
-      return res.status(500).json({ message: 'User Not Found' });
+      return res.status(404).json({ message: 'User Not Found' });
     }
     if (!user.isAdmin) {
       return res.status(401).json({ message: 'You are not an admin. Create an admin account to sell products.' });
     }
 
-    // Upload product image to Cloudinary
-    const productImageBuffer = req.files['productImage'][0].buffer;
-    const productImageUpload = await cloudinary.uploader.upload(
-      `data:image/jpeg;base64,${productImageBuffer.toString('base64')}`,
-      {
+    let productImageUpload = null;
+    let logoImageUpload = null;
+
+    // Handle product image upload
+    if (req.files?.['productImage']) {
+      const buffer = req.files['productImage'][0].buffer;
+      productImageUpload = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${buffer.toString('base64')}`,
+        {
+          folder: 'products',
+          transformation: [{ width: 800, quality: 70, crop: 'scale' }],
+        }
+      );
+    } else if (productImageUrl) {
+      productImageUpload = await cloudinary.uploader.upload(productImageUrl, {
         folder: 'products',
         transformation: [{ width: 800, quality: 70, crop: 'scale' }],
-      }
-    );
+      });
+    }
 
-    // Upload company logo to Cloudinary
-    const logoBuffer = req.files['companyLogo'][0].buffer;
-    const logoImageUpload = await cloudinary.uploader.upload(
-      `data:image/jpeg;base64,${logoBuffer.toString('base64')}`,
-      {
+    // Handle company logo upload
+    if (req.files?.['companyLogo']) {
+      const buffer = req.files['companyLogo'][0].buffer;
+      logoImageUpload = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${buffer.toString('base64')}`,
+        {
+          folder: 'logos',
+          transformation: [{ width: 400, quality: 70, crop: 'scale' }],
+        }
+      );
+    } else if (companyLogoUrl) {
+      logoImageUpload = await cloudinary.uploader.upload(companyLogoUrl, {
         folder: 'logos',
         transformation: [{ width: 400, quality: 70, crop: 'scale' }],
-      }
-    );
+      });
+    }
 
     const product = await Product.create({
       name,
@@ -40,10 +68,11 @@ exports.addProduct = async (req, res) => {
       stocks,
       location,
       description,
-      image: productImageUpload.secure_url,
-      com_logo: logoImageUpload.secure_url,
+      image: productImageUpload?.secure_url,
+      com_logo: logoImageUpload?.secure_url,
       adminId,
     });
+
     return res.status(200).json({ message: 'Product Added Successfully', product });
   } catch (error) {
     console.error(error);
@@ -56,7 +85,7 @@ exports.getProducts = async (req, res) => {
     const products = await Product.find();
     return res.status(200).json(products);
   } catch (error) {
-    return res.status(400).json({ message: 'error to fetch all products' });
+    return res.status(400).json({ message: 'Error fetching all products' });
   }
 };
 
@@ -65,17 +94,18 @@ exports.getOneProduct = async (req, res) => {
   try {
     const product = await Product.findById(id);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: 'Product not found' });
     }
     const admin = await User.findById(product.adminId);
     return res.status(200).json({ product, admin });
   } catch (error) {
-    return res.status(400).json({ message: "Error To Get Details, Try Again Later" });
+    return res.status(400).json({ message: 'Error getting product details' });
   }
 };
 
 exports.updateProduct = async (req, res) => {
-  const { id, name, category, price, stocks, location, description } = req.body;
+  const { id, name, category, price, stocks, location, description, productImageUrl, companyLogoUrl } = req.body;
+
   try {
     const updateData = {
       name,
@@ -86,29 +116,42 @@ exports.updateProduct = async (req, res) => {
       description,
     };
 
-    // Optional: handle updated images
-    if (req.files && req.files['productImage']) {
-      const productImageBuffer = req.files['productImage'][0].buffer;
-      const productImageUpload = await cloudinary.uploader.upload(
-        `data:image/jpeg;base64,${productImageBuffer.toString('base64')}`,
+    // Optional updated product image
+    if (req.files?.['productImage']) {
+      const buffer = req.files['productImage'][0].buffer;
+      const upload = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${buffer.toString('base64')}`,
         {
           folder: 'products',
           transformation: [{ width: 800, quality: 70, crop: 'scale' }],
         }
       );
-      updateData.image = productImageUpload.secure_url;
+      updateData.image = upload.secure_url;
+    } else if (productImageUrl) {
+      const upload = await cloudinary.uploader.upload(productImageUrl, {
+        folder: 'products',
+        transformation: [{ width: 800, quality: 70, crop: 'scale' }],
+      });
+      updateData.image = upload.secure_url;
     }
 
-    if (req.files && req.files['companyLogo']) {
-      const logoBuffer = req.files['companyLogo'][0].buffer;
-      const logoImageUpload = await cloudinary.uploader.upload(
-        `data:image/jpeg;base64,${logoBuffer.toString('base64')}`,
+    // Optional updated logo
+    if (req.files?.['companyLogo']) {
+      const buffer = req.files['companyLogo'][0].buffer;
+      const upload = await cloudinary.uploader.upload(
+        `data:image/jpeg;base64,${buffer.toString('base64')}`,
         {
           folder: 'logos',
           transformation: [{ width: 400, quality: 70, crop: 'scale' }],
         }
       );
-      updateData.com_logo = logoImageUpload.secure_url;
+      updateData.com_logo = upload.secure_url;
+    } else if (companyLogoUrl) {
+      const upload = await cloudinary.uploader.upload(companyLogoUrl, {
+        folder: 'logos',
+        transformation: [{ width: 400, quality: 70, crop: 'scale' }],
+      });
+      updateData.com_logo = upload.secure_url;
     }
 
     const product = await Product.findByIdAndUpdate(id, updateData, { new: true });
@@ -129,7 +172,7 @@ exports.getAdminProducts = async (req, res) => {
     const products = await Product.find({ adminId });
     return res.status(200).json(products);
   } catch (error) {
-    return res.status(400).json({ message: 'Error to fetch your Products' });
+    return res.status(400).json({ message: 'Error fetching your products' });
   }
 };
 
@@ -138,15 +181,26 @@ exports.deleteProducts = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(id);
     if (!product) {
-      return res.status(500).json({ message: 'Product not found' });
+      return res.status(404).json({ message: 'Product not found' });
     }
-    // Delete images from Cloudinary
-    const publicIdProduct = product.image.split('/').pop().split('.')[0];
-    const publicIdLogo = product.com_logo.split('/').pop().split('.')[0];
-    await cloudinary.uploader.destroy(`products/${publicIdProduct}`);
-    await cloudinary.uploader.destroy(`logos/${publicIdLogo}`);
-    return res.status(200).json({ message: 'Product Deleted Successfully', product });
+
+    // Extract public ID from Cloudinary URLs
+    const getPublicId = (url) => {
+      const parts = url.split('/');
+      const filename = parts.pop();
+      const folder = parts.pop();
+      return `${folder}/${filename.split('.')[0]}`;
+    };
+
+    if (product.image) {
+      await cloudinary.uploader.destroy(getPublicId(product.image));
+    }
+    if (product.com_logo) {
+      await cloudinary.uploader.destroy(getPublicId(product.com_logo));
+    }
+
+    return res.status(200).json({ message: 'Product deleted successfully', product });
   } catch (error) {
-    return res.status(400).json({ message: 'Error to Delete Product' });
+    return res.status(400).json({ message: 'Error deleting product' });
   }
 };
