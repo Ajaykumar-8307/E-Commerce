@@ -57,13 +57,27 @@ export class AddProducts implements OnInit {
     formData.append('location', this.product.location);
     formData.append('description', this.product.description);
     formData.append('adminId', this.product.adminId);
-    if (this.productImage) formData.append('productImage', this.productImage);
-    if (this.companyLogo) formData.append('companyLogo', this.companyLogo);
+
+    // Either file OR URL for product image
+    if (this.productImage) {
+      formData.append('productImage', this.productImage);
+    } else if (this.product.productImageUrl) {
+      formData.append('productImageUrl', this.product.productImageUrl);
+    }
+
+    // Either file OR URL for company logo
+    if (this.companyLogo) {
+      formData.append('companyLogo', this.companyLogo);
+    } else if (this.product.companyLogoUrl) {
+      formData.append('companyLogoUrl', this.product.companyLogoUrl);
+    }
 
     this.http.post(`${this.API_Link}/product/addproducts`, formData).subscribe({
       next: (res: any) => {
         alert('Product added successfully');
         this.product = {};
+        this.productImage = null;
+        this.companyLogo = null;
         window.location.reload();
       },
       error: (err: any) => {

@@ -21,7 +21,7 @@ export class ProductEdit implements OnInit {
     private http: HttpClient,
     private cd: ChangeDetectorRef,
     private location: Location
-  ) {}
+  ) { }
 
   pro_id: string = '';
 
@@ -56,19 +56,31 @@ export class ProductEdit implements OnInit {
 
   onUpdateProduct() {
     const formData = new FormData();
-    formData.append('id', this.pro_id); 
+    formData.append('id', this.pro_id);
+
+    // Append product details
     for (const key in this.product) {
-      if (this.product[key] !== undefined && this.product[key] !== null) {
+      if (
+        this.product[key] !== undefined &&
+        this.product[key] !== null &&
+        key !== 'image' &&
+        key !== 'com_logo'
+      ) {
         formData.append(key, this.product[key]);
       }
     }
 
+    // Append image file or URL
     if (this.productImage) {
       formData.append('productImage', this.productImage);
+    } else if (this.product.productImageUrl) {
+      formData.append('productImageUrl', this.product.productImageUrl);
     }
 
     if (this.companyLogo) {
       formData.append('companyLogo', this.companyLogo);
+    } else if (this.product.companyLogoUrl) {
+      formData.append('companyLogoUrl', this.product.companyLogoUrl);
     }
 
     this.http.post(`${this.API_Link}/product/updateproduct`, formData).subscribe({
@@ -79,11 +91,11 @@ export class ProductEdit implements OnInit {
       error: (err) => {
         alert(`${err.error.message}`);
         console.error(err);
-      },
+      }
     });
   }
 
-  goback(){
+  goback() {
     this.location.back();
   }
 }
