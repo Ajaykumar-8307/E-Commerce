@@ -60,15 +60,19 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-exports.getOneProduct = async(req, res) => {
+exports.getOneProduct = async (req, res) => {
   const { id } = req.query;
-  try{
+  try {
     const product = await Product.findById(id);
-    return res.status(200).json(product);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    const admin = await User.findById(product.adminId);
+    return res.status(200).json({ product, admin });
   } catch (error) {
-    return res.status(400).json({message: "Error To Get Details, Try Again Later"});
+    return res.status(400).json({ message: "Error To Get Details, Try Again Later" });
   }
-}
+};
 
 exports.updateProduct = async (req, res) => {
   const { id, name, category, price, stocks, location, description } = req.body;
