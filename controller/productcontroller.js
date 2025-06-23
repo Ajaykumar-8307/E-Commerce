@@ -24,41 +24,37 @@ exports.addProduct = async (req, res) => {
       return res.status(401).json({ message: 'You are not an admin. Create an admin account to sell products.' });
     }
 
-    let productImageUpload = null;
-    let logoImageUpload = null;
+    let productImage = '';
+    let companyLogo = '';
 
-    // Handle product image upload
+    // Handle product image
     if (req.files?.['productImage']) {
       const buffer = req.files['productImage'][0].buffer;
-      productImageUpload = await cloudinary.uploader.upload(
+      const upload = await cloudinary.uploader.upload(
         `data:image/jpeg;base64,${buffer.toString('base64')}`,
         {
           folder: 'products',
-          transformation: [{ width: 800, quality: 70, crop: 'scale' }],
+          transformation: [{ width: 800, quality: 70, crop: 'scale' }]
         }
       );
+      productImage = upload.secure_url;
     } else if (productImageUrl) {
-      productImageUpload = await cloudinary.uploader.upload(productImageUrl, {
-        folder: 'products',
-        transformation: [{ width: 800, quality: 70, crop: 'scale' }],
-      });
+      productImage = productImageUrl; // use raw URL
     }
 
-    // Handle company logo upload
+    // Handle company logo
     if (req.files?.['companyLogo']) {
       const buffer = req.files['companyLogo'][0].buffer;
-      logoImageUpload = await cloudinary.uploader.upload(
+      const upload = await cloudinary.uploader.upload(
         `data:image/jpeg;base64,${buffer.toString('base64')}`,
         {
           folder: 'logos',
-          transformation: [{ width: 400, quality: 70, crop: 'scale' }],
+          transformation: [{ width: 400, quality: 70, crop: 'scale' }]
         }
       );
+      companyLogo = upload.secure_url;
     } else if (companyLogoUrl) {
-      logoImageUpload = await cloudinary.uploader.upload(companyLogoUrl, {
-        folder: 'logos',
-        transformation: [{ width: 400, quality: 70, crop: 'scale' }],
-      });
+      companyLogo = companyLogoUrl; // use raw URL
     }
 
     const product = await Product.create({
@@ -68,8 +64,8 @@ exports.addProduct = async (req, res) => {
       stocks,
       location,
       description,
-      image: productImageUpload?.secure_url,
-      com_logo: logoImageUpload?.secure_url,
+      image: productImage,
+      com_logo: companyLogo,
       adminId,
     });
 
@@ -104,7 +100,17 @@ exports.getOneProduct = async (req, res) => {
 };
 
 exports.updateProduct = async (req, res) => {
-  const { id, name, category, price, stocks, location, description, productImageUrl, companyLogoUrl } = req.body;
+  const {
+    id,
+    name,
+    category,
+    price,
+    stocks,
+    location,
+    description,
+    productImageUrl,
+    companyLogoUrl
+  } = req.body;
 
   try {
     const updateData = {
@@ -116,42 +122,34 @@ exports.updateProduct = async (req, res) => {
       description,
     };
 
-    // Optional updated product image
+    // Handle product image
     if (req.files?.['productImage']) {
       const buffer = req.files['productImage'][0].buffer;
       const upload = await cloudinary.uploader.upload(
         `data:image/jpeg;base64,${buffer.toString('base64')}`,
         {
           folder: 'products',
-          transformation: [{ width: 800, quality: 70, crop: 'scale' }],
+          transformation: [{ width: 800, quality: 70, crop: 'scale' }]
         }
       );
       updateData.image = upload.secure_url;
     } else if (productImageUrl) {
-      const upload = await cloudinary.uploader.upload(productImageUrl, {
-        folder: 'products',
-        transformation: [{ width: 800, quality: 70, crop: 'scale' }],
-      });
-      updateData.image = upload.secure_url;
+      updateData.image = productImageUrl; // raw URL
     }
 
-    // Optional updated logo
+    // Handle company logo
     if (req.files?.['companyLogo']) {
       const buffer = req.files['companyLogo'][0].buffer;
       const upload = await cloudinary.uploader.upload(
         `data:image/jpeg;base64,${buffer.toString('base64')}`,
         {
           folder: 'logos',
-          transformation: [{ width: 400, quality: 70, crop: 'scale' }],
+          transformation: [{ width: 400, quality: 70, crop: 'scale' }]
         }
       );
       updateData.com_logo = upload.secure_url;
     } else if (companyLogoUrl) {
-      const upload = await cloudinary.uploader.upload(companyLogoUrl, {
-        folder: 'logos',
-        transformation: [{ width: 400, quality: 70, crop: 'scale' }],
-      });
-      updateData.com_logo = upload.secure_url;
+      updateData.com_logo = companyLogoUrl; // raw URL
     }
 
     const product = await Product.findByIdAndUpdate(id, updateData, { new: true });
