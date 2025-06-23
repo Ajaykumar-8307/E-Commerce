@@ -41,7 +41,6 @@ export class Dashboard implements OnInit {
           this.admin.isAdmin = deCodedToken.isAdmin;
           this.admin.name = deCodedToken.userName;
           this.admin.id = deCodedToken.id;
-          console.log(this.admin.isAdmin);
         }
         if (!this.admin.isAdmin) {
           alert('UnAuthorized Access');
@@ -55,7 +54,7 @@ export class Dashboard implements OnInit {
       this.http.get<any[]>(`${this.API_Link}/product/adminproducts`, { params: { adminId: this.admin.id } }).subscribe({
         next: (res: any) => {
           this.products = res;
-          console.log(res);
+          this.getProductCount();
           this.cd.detectChanges();
         },
         error: (error: any) => {
