@@ -23,12 +23,24 @@ export class AdminPage implements OnInit {
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       this.token = localStorage.getItem('token');
-      const deCodedToken: any = jwtDecode(this.token);
-      if(deCodedToken){
-        this.isAdmin = deCodedToken.isAdmin;
-      }
-      if (!this.isAdmin) {
-        alert('UnAuthorized Access');
+
+      if (this.token && typeof this.token === 'string') {
+        try {
+          const deCodedToken: any = jwtDecode(this.token);
+          this.isAdmin = deCodedToken?.isAdmin || false;
+
+          if (!this.isAdmin) {
+            alert('Unauthorized Access');
+            this.router.navigate(['/']);
+          }
+
+        } catch (error) {
+          console.error('Invalid token:', error);
+          alert('Invalid token. Please login again.');
+          this.router.navigate(['/']);
+        }
+      } else {
+        alert('No token found. Please login.');
         this.router.navigate(['/']);
       }
     }
@@ -45,7 +57,7 @@ export class AdminPage implements OnInit {
     }
   }
 
-  refresh(){
+  refresh() {
     window.location.reload();
   }
 

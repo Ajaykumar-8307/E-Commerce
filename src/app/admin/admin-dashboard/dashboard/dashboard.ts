@@ -45,6 +45,7 @@ export class Dashboard implements OnInit {
         if (!this.admin.isAdmin) {
           alert('UnAuthorized Access');
           this.router.navigate(['/']);
+          this.cd.detectChanges();
         }
       } else {
         alert('Login First');
