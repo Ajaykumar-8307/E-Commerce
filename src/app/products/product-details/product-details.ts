@@ -26,6 +26,7 @@ export class ProductDetails implements OnInit{
   API_Link = environment.apiUrl;
 
   product: any= {};
+  admin: any = {};
   id: string = '';
 
   ngOnInit(): void {
@@ -35,7 +36,8 @@ export class ProductDetails implements OnInit{
 
     this.http.get<any[]>(`${this.API_Link}/product/pro-details`, { params: { id: this.id } }).subscribe({
       next: (res: any) => {
-        this.product = res;
+        this.product = res.product;
+        this.admin = res.admin;
         this.cd.detectChanges();
         console.log(res);
       }
