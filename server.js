@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRouter = require('./router/userrouter');
 const productRouter = require('./router/productrouter');
+const cartRouter = require('./router/cartrouter');
 const session = require('express-session');
 const cors = require('cors');
 
@@ -26,6 +27,7 @@ mongoose.connect(URL, {
 // Routes
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/product', productRouter);
+app.use('/api/v1/cart', cartRouter);
 
 // Start server
 app.listen(PORT, () => {
