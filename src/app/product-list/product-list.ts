@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environments.prod';
 import { Router, ActivatedRoute } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-product-list',
@@ -22,15 +23,23 @@ export class ProductList implements OnInit {
   Filter: any[] = [];
   filter_price: string = '';
   searchTerm = '';
+  userId = '';
 
   constructor(
     private http: HttpClient,
     private cd: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        this.userId = decodedToken.id;
+      }
+    }
     this.fetchProducts();
   }
 
@@ -62,11 +71,22 @@ export class ProductList implements OnInit {
     (event.target as HTMLImageElement).src = 'assets/fallback-image.jpg';
   }
 
-  navToDetails(product: any){
+  navToDetails(product: any) {
     this.router.navigate(['/products'], { queryParams: { id: product._id } });
   }
 
-  print(){
-    console.log("Hello");
+  addToCart(productId: String, quantity: Number = 1) {
+    this.http.post(`${this.API_Link}/cart/add`, {
+      userId: this.userId,
+      productId,
+      quantity
+    }).subscribe({
+      next: (res: any) => {
+        alert(`${res.message}`);
+      },
+      error: (err: any) => {
+        alert(`${err.error.message}`);
+      }
+    });
   }
 }
