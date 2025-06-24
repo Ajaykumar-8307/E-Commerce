@@ -5,6 +5,7 @@ import { Navbar } from '../../navbar/navbar';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../../environments/environments.prod';
 import { ChangeDetectorRef } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-cart-page',
@@ -17,33 +18,49 @@ export class CartPage implements OnInit {
   constructor(private http: HttpClient, private cd: ChangeDetectorRef) { }
 
   API_Link = environment.apiUrl;
-  cartItems: any[] = [];
+  cartItems: any;
   quantities = [1, 2, 3];
+  userId = '';
 
   ngOnInit(): void {
-    this.http.get<any[]>(`${this.API_Link}/product/getproducts`).subscribe({
+    if(typeof window !== 'undefined'){
+      const token = localStorage.getItem('token');
+      if(token){
+        const decodedToken: any = jwtDecode(token);
+        this.userId = decodedToken.id;
+        this.cd.detectChanges();
+      }
+      this.loadProducts();
+    }
+  }
+
+  couponCode = '';
+
+  loadProducts(){
+    this.http.get<any[]>(`${this.API_Link}/cart/${this.userId}`).subscribe({
       next: (res: any) => {
-        this.cartItems = res.map((item: any) => ({
-          ...item,
-          quantity: 1
-        }));
+        this.cartItems = res;
         this.cd.detectChanges();
       },
       error: (error: any) => {
         alert(`${error.error.message}`);
       }
+    })
+  }
+
+  removeProduct(productId: any){
+    this.http.post(`${this.API_Link}/cart/remove`, {
+      userId: this.userId,
+      productId
+    }).subscribe({
+      next: (res: any) => {
+        alert(`${res.message}`);
+        this.loadProducts();
+      },
+      error: (err: any) => {
+        alert(`${err.error.message}`);
+      }
     });
-    this.getTotal();
-  }
-
-  couponCode = '';
-
-  getTotal(): number {
-    return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  }
-
-  removeItem(itemToRemove: any): void {
-    this.cartItems = this.cartItems.filter(item => item !== itemToRemove);
   }
 
   applyCoupon(): void {

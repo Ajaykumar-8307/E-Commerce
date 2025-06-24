@@ -1,23 +1,24 @@
 <app-navbar></app-navbar>
 <div class="container">
   <h1>My Shopping Cart</h1>
-
   <div class="cart-layout">
     <!-- Cart Items -->
-    <div class="left-side">
+    <div class="left-side" *ngIf="cartItems?.items?.length > 0; else emptyCart">
       <div class="cart-items">
-        <div class="cart-item" *ngFor="let item of cartItems">
-          <img [src]="item.image" [alt]="item.name" />
+        <div class="cart-item" *ngFor="let item of cartItems.items">
+          <img [src]="item.productId?.image" [alt]="item.productId?.name" />
           <div class="item-details">
-            <h2>{{ item.name }}</h2>
+            <h2>{{ item.productId?.name }}</h2>
             <div class="item-info">
-              <p>₹{{ item.price }}</p>
+              <p>₹{{ item.productId?.price }}</p>
               <select [(ngModel)]="item.quantity">
                 <option *ngFor="let qty of quantities" [value]="qty">Qty: {{ qty }}</option>
               </select>
             </div>
             <div class="item-actions">
-              <button (click)="removeItem(item)"><i class="fa fa-trash"></i> Remove</button>
+              <button (click)="removeProduct(item.productId._id)">
+                <i class="fa fa-trash"></i> Remove
+              </button>
             </div>
           </div>
         </div>
@@ -38,7 +39,7 @@
         <h2>PRICE DETAILS</h2>
         <div class="price-row">
           <span>Bag Total</span>
-          <span>₹{{ getTotal() }}</span>
+          <span>₹ 0</span>
         </div>
         <div class="price-row">
           <span>Delivery</span>
@@ -46,7 +47,7 @@
         </div>
         <div class="price-row total-row">
           <span>Total Amount</span>
-          <span>₹{{ getTotal() }}</span>
+          <span>₹ 0</span>
         </div>
         <div class="desktop-order-btn">
           <button><i class="fa fa-shopping-cart"></i> Place Order</button>
@@ -56,6 +57,14 @@
   </div>
 </div>
 
-<div class="mobile-footer">
-  <button><i class="fa fa-shopping-cart"></i> PLACE ORDER ₹{{ getTotal() }}</button>
+<!-- EMPTY CART TEMPLATE -->
+<ng-template #emptyCart>
+  <div class="empty-cart">
+    <p>Your cart is empty.</p>
+  </div>
+</ng-template>
+
+<!-- Mobile Footer -->
+<div class="mobile-footer" *ngIf="cartItems?.items?.length > 0">
+  <button><i class="fa fa-shopping-cart"></i> PLACE ORDER ₹ 0</button>
 </div>
