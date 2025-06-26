@@ -14,7 +14,7 @@ exports.Pay = async (req, res) => {
                 product_data: {
                 name: product.name,
                 },
-                unit_amount: product.price * 1000,
+                unit_amount: product.price * 100,
             },
             quantity: 1,
             }],
