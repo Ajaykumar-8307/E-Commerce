@@ -24,7 +24,7 @@ exports.Pay = async (req, res) => {
             success_url: 'http://localhost:4200/success',
             cancel_url: 'http://localhost:4200/cancel',
         });
-        await PaymentSuccess()
+        await PaymentSuccess(email, user.name, product.name, product.price);
         return res.status(200).json({message: "Order Placed Successfully", id: session.id });
     } catch (error) {
         console.error(error);
