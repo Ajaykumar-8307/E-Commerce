@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environments.prod';
 import { ChangeDetectorRef } from '@angular/core';
+import { loadStripe } from '@stripe/stripe-js';
 
 @Component({
   selector: 'app-product-details',
@@ -14,18 +15,20 @@ import { ChangeDetectorRef } from '@angular/core';
   styleUrl: './product-details.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class ProductDetails implements OnInit{
+export class ProductDetails implements OnInit {
+
+  stripePromise = loadStripe('pk_test_51Re964QDrlAoNSk6lNET5M9pLHMOlkRzg5adEYGy97utyODv6GwLFlzwvh7LFxxaDARqEPFodDg0UO4BOy9LZY6s002k152nvv');
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
     private cd: ChangeDetectorRef
-  ){}
+  ) { }
 
   API_Link = environment.apiUrl;
 
-  product: any= {};
+  product: any = {};
   admin: any = {};
   id: string = '';
 
@@ -42,6 +45,19 @@ export class ProductDetails implements OnInit{
         console.log(res);
       }
     });
+  }
+
+  async buyProduct() {
+
+    this.http.post<any>(`${this.API_Link}/pay/create-checkout-session`, { product: this.product })
+      .subscribe(async (res) => {
+        alert(res.message);
+        const stripe = await this.stripePromise;
+        if (stripe) {
+          await stripe.redirectToCheckout({ sessionId: res.id });
+        }
+        this.cd.detectChanges();
+      });
   }
 
 }
