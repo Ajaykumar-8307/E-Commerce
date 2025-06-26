@@ -13,6 +13,10 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req,res) => {
+  res.send("Server Uyiroda irukku");
+});
+
 // MongoDB connection
 const URL = 'mongodb+srv://kjajaykumar8307:password8307@cluster0.jhhdre3.mongodb.net/Users?retryWrites=true&w=majority';
 mongoose.connect(URL, {
