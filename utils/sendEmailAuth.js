@@ -53,4 +53,27 @@ const verifySuccessEmail = async (email, name) => {
   }
 };
 
-module.exports = { sendVerificationEmail, verifySuccessEmail };
+const PaymentSuccess = async (email, name, productName, productPrice) => {
+  try {
+    const templatePath = path.join(__dirname, '../html-files/PaymentSuccess.html');
+    let htmlContent = await fs.readFile(templatePath, 'utf8');
+    htmlContent = htmlContent
+      .replace(/{email}/g, email)
+      .replace(/{name}/g, name)
+      .replace(/{productName}/g, productName)
+      .replace(/{productPrice}/g, productPrice);
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Payment Successful',
+      html: htmlContent
+    };
+
+    return await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error('Error sending success email:', error);
+    throw error;
+  }
+};
+
+module.exports = { sendVerificationEmail, verifySuccessEmail, PaymentSuccess };
