@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environments.prod';
 import { ChangeDetectorRef } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-product-details',
@@ -31,8 +32,16 @@ export class ProductDetails implements OnInit {
   product: any = {};
   admin: any = {};
   id: string = '';
+  userId = '';
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        this.userId = decodedToken.id;
+      }
+    }
     this.route.queryParams.subscribe((params) => {
       this.id = params['id'];
     });
@@ -58,6 +67,21 @@ export class ProductDetails implements OnInit {
         }
         this.cd.detectChanges();
       });
+  }
+
+  addToCart(productId = this.product._id, quantity: Number = 1) {
+    this.http.post(`${this.API_Link}/cart/add`, {
+      userId: this.userId,
+      productId,
+      quantity
+    }).subscribe({
+      next: (res: any) => {
+        alert(`${res.message}`);
+      },
+      error: (err: any) => {
+        alert(`${err.error.message}`);
+      }
+    });
   }
 
 }
