@@ -32,14 +32,14 @@ export class ProductDetails implements OnInit {
   product: any = {};
   admin: any = {};
   id: string = '';
-  userId = '';
+  user: any = {};
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
       if (token) {
         const decodedToken: any = jwtDecode(token);
-        this.userId = decodedToken.id;
+        this.user = decodedToken;
       }
     }
     this.route.queryParams.subscribe((params) => {
@@ -58,7 +58,7 @@ export class ProductDetails implements OnInit {
 
   async buyProduct() {
 
-    this.http.post<any>(`${this.API_Link}/pay/buynow`, { product: this.product })
+    this.http.post<any>(`${this.API_Link}/pay/buynow`, { product: this.product, email: this.user.email })
       .subscribe(async (res) => {
         alert(res.message);
         const stripe = await this.stripePromise;
@@ -71,7 +71,7 @@ export class ProductDetails implements OnInit {
 
   addToCart(productId = this.product._id, quantity: Number = 1) {
     this.http.post(`${this.API_Link}/cart/add`, {
-      userId: this.userId,
+      userId: this.user.id,
       productId,
       quantity
     }).subscribe({
