@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 const sendVerificationEmail = async (email, otp) => {
   try {
-    const templatePath = path.join(__dirname, 'otpverify-email-template.html');
+    const templatePath = path.join(__dirname, '../html-files/otpverify-email-template.html');
     let htmlContent = await fs.readFile(templatePath, 'utf8');
     htmlContent = htmlContent
       .replace(/{otp}/g, otp)
@@ -36,7 +36,7 @@ const sendVerificationEmail = async (email, otp) => {
 
 const verifySuccessEmail = async (email, name) => {
   try {
-    const templatePath = path.join(__dirname, 'verifySuccess.html');
+    const templatePath = path.join(__dirname, '../html-files/verifySuccess.html');
     let htmlContent = await fs.readFile(templatePath, 'utf8');
     htmlContent = htmlContent.replace(/{email}/g, name);
     const mailOptions = {
