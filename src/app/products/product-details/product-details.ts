@@ -58,7 +58,7 @@ export class ProductDetails implements OnInit {
 
   async buyProduct() {
 
-    this.http.post<any>(`${this.API_Link}/pay/create-checkout-session`, { product: this.product })
+    this.http.post<any>(`${this.API_Link}/pay/buynow`, { product: this.product })
       .subscribe(async (res) => {
         alert(res.message);
         const stripe = await this.stripePromise;
