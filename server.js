@@ -4,8 +4,12 @@ const mongoose = require('mongoose');
 const userRouter = require('./router/userrouter');
 const productRouter = require('./router/productrouter');
 const cartRouter = require('./router/cartrouter');
+const PayRouter = require('./router/paymentrouter');
 const session = require('express-session');
 const cors = require('cors');
+const Stripe = require("stripe");
+
+const stripe = Stripe("sk_test_51Re964QDrlAoNSk6ADlYvhC09OxB1fnDK6HtFM6NYwPyfZf00ehqRNKwdeTTVkOT4Zol5uWZnPCSxVBGsX8rHeJu00Mx7tUFoB");
 
 const app = express();
 const PORT = 3000;
@@ -32,6 +36,7 @@ mongoose.connect(URL, {
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/cart', cartRouter);
+app.use('/api/v1/pay', PayRouter);
 
 // Start server
 app.listen(PORT, () => {
