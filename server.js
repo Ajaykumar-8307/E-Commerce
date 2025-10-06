@@ -1,29 +1,43 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const userRouter = require('./router/userrouter');
-const productRouter = require('./router/productrouter');
-const cartRouter = require('./router/cartrouter');
-const PayRouter = require('./router/paymentrouter');
 const session = require('express-session');
 const cors = require('cors');
 const Stripe = require("stripe");
+const fileUpload = require('express-fileupload');
 
-const stripe = Stripe("sk_test_51Re964QDrlAoNSk6ADlYvhC09OxB1fnDK6HtFM6NYwPyfZf00ehqRNKwdeTTVkOT4Zol5uWZnPCSxVBGsX8rHeJu00Mx7tUFoB");
+// Routers
+const userRouter = require('./router/userrouter');
+const productRouter = require('./router/productrouter');
+const cartRouter = require('./router/cartrouter');
+const payRouter = require('./router/paymentrouter');
+const aiRouter = require('./router/chatRouter');
+const geminiRouter = require('./router/geminiRouter');
+
+// Initialize Stripe
+const stripe = Stripe(process.env.STRIPE_KEY || "sk_test_51Re964QDrlAoNSk6ADlYvhC09OxB1fnDK6HtFM6NYwPyfZf00ehqRNKwdeTTVkOT4Zol5uWZnPCSxVBGsX8rHeJu00Mx7tUFoB");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'mysecret',
+  resave: false,
+  saveUninitialized: true
+}));
 
-app.get('/', (req,res) => {
-  res.send("Server Uyiroda irukku");
+// Test route
+app.get('/', (req, res) => {
+  res.send("Server is running 🚀");
 });
 
 // MongoDB connection
-const URL = 'mongodb+srv://kjajaykumar8307:password8307@cluster0.jhhdre3.mongodb.net/Users?retryWrites=true&w=majority';
-mongoose.connect(URL, {
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://kjajaykumar8307:password8307@cluster0.jhhdre3.mongodb.net/Users?retryWrites=true&w=majority';
+mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
@@ -36,7 +50,9 @@ mongoose.connect(URL, {
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/cart', cartRouter);
-app.use('/api/v1/pay', PayRouter);
+app.use('/api/v1/pay', payRouter);
+app.use('/api/v1/ai', aiRouter);  // AI routes (text + image OCR)
+app.use('/api/v1/gemini', geminiRouter);  // Gemini AI routes
 
 // Start server
 app.listen(PORT, () => {
