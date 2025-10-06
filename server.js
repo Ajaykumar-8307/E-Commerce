@@ -32,7 +32,7 @@ app.use(session({
 
 // Test route
 app.get('/', (req, res) => {
-  res.send("Server is running 🚀");
+  res.send("Server Uyirodu irukku 🚀");
 });
 
 // MongoDB connection
