@@ -28,6 +28,12 @@ Output Format: Always respond in natural text unless the user specifically reque
 "description": "" (persuasive, 250–500 characters),
 "recommendations": [] (array of similar products)
 }
+
+if user asked something like this : I want a product PRODUCT_NAME, PRODUCT_NAME, and etc. Then you should give the content like this :
+{
+    "product":"PRODUCT_NAME"
+}
+
 Rules:
 
 Base responses on general knowledge; be accurate and unbiased.
