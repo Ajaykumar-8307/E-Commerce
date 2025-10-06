@@ -1,3 +1,35 @@
 <app-navbar></app-navbar>
 <app-carousel></app-carousel>
 <app-product-list></app-product-list>
+
+<div class="overlay-text">
+    <div class="header">
+        <div class="right-side-content">
+            <i class="fa fa-robot"></i>
+            <h4>Kitta</h4>
+        </div>
+        <div class="left-side-content">
+            <i class="fa fa-minus"></i>
+        </div>
+    </div>
+
+    <div class="body">
+        <div *ngIf="isLoading" class="loading-overlay">
+            <div class="loading-bar">
+                <i class="fa fa-spinner fa-spin"></i> Thinking...
+            </div>
+        </div>
+
+        <h2 *ngIf="!content">Welcome to Kitta, your AI-powered assistant for creating compelling product descriptions!
+        </h2>
+        <p *ngIf="!content">Simply upload an image of your product and provide its name, and let Kitta generate a
+            captivating description for you.</p>
+        <p [innerHTML]="content"></p>
+        <!-- If this doesn't render, try {{content}} instead to test if it's a sanitization issue -->
+    </div>
+
+    <div class="search-bar">
+        <input type="text" [(ngModel)]="description" placeholder="Search for products..." />
+        <button (click)="generateDescription()"><i class="fa fa-search"></i></button>
+    </div>
+</div>

@@ -57,6 +57,39 @@ label {
     color: #2d3436;
 }
 
+
+.editable-description {
+    min-height: 120px;
+    max-height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 8px 8px 8px 30px;
+    border-radius: 4px;
+    background: #fff;
+    outline: none;
+    white-space: pre-wrap;
+    direction: ltr !important;
+    text-align: left !important;
+    unicode-bidi: embed !important;
+}
+
+
+.editable-description:focus {
+    border-color: #007bff;
+}
+
+.editable-description {
+    direction: ltr;
+    /* enforce left-to-right */
+    text-align: left;
+    /* align text properly */
+    unicode-bidi: plaintext;
+    /* prevent weird mixing of RTL/LTR */
+}
+
+
+
+
 input,
 textarea,
 select {

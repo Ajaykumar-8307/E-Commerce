@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -27,10 +27,14 @@ export class AddProducts implements OnInit {
 
   productImage: File | null = null;
   companyLogo: File | null = null;
+  aiGenerated = false;
 
   token: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private cd: ChangeDetectorRef,
+  ) { }
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
@@ -46,6 +50,28 @@ export class AddProducts implements OnInit {
       if (field === 'productImage') this.productImage = file;
       else if (field === 'companyLogo') this.companyLogo = file;
     }
+  }
+
+  aigenerateDescription() {
+    this.http.post(`${this.API_Link}/gemini/product-description`, {
+      prompt: this.product.description,
+      name: this.product.name,
+      cato: this.product.category
+    }).subscribe({
+      next: (res: any) => {
+        this.product.description = res.text;
+        this.aiGenerated = true;
+        this.cd.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Error:', err);
+      }
+    });
+  }
+
+  onDescriptionChange(event: Event) {
+    const element = event.target as HTMLElement;
+    this.product.description = element.innerHTML;
   }
 
   onSubmit() {

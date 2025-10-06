@@ -36,9 +36,17 @@
     </select>
   </div>
 
-  <div class="form-group">
+  <div class="form-group description-group">
     <label>Description</label>
-    <textarea [(ngModel)]="product.description" name="description" placeholder="Enter product description"></textarea>
+    <!-- <textarea [(ngModel)]="product.description" name="description" placeholder="Enter product description"></textarea> -->
+    <div #editor class="editable-description" contenteditable="true" (input)="product.description = editor.innerHTML"
+      [innerHTML]="aiGenerated ? product.description : null">
+    </div>
+
+
+    <div class="ai-generate">
+      <button type="button" (click)="aigenerateDescription()">Enhance with AI</button>
+    </div>
   </div>
 
   <div class="form-group">

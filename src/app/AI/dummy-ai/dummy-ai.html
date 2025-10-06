@@ -1,0 +1,23 @@
+<div class="container">
+    <h1>Kitta The AI</h1>
+    <p>Create your Product description using Kitta</p>
+
+    <div class="input-container">
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+        <input type="text" placeholder="Enter product Name" [(ngModel)]="productName" />
+
+        <!-- Large textarea for generated description -->
+        <div class="textarea-wrapper">
+            <textarea placeholder="Generated Description will appear here..." [(ngModel)]="description" readonly></textarea>
+
+            <!-- Loading overlay on textarea -->
+            <div class="loading-overlay" *ngIf="isLoading">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <button (click)="generateDescription()">Generate</button>
+        <button (click)="refresh()">Refresh</button>
+    </div>
+</div>
