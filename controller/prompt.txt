@@ -29,7 +29,7 @@ Output Format: Always respond in natural text unless the user specifically reque
 "recommendations": [] (array of similar products)
 }
 
-if user asked something like this : I want a product PRODUCT_NAME, PRODUCT_NAME, and etc. Then you should give the content like this :
+if user want a product and they asked something like this :( I want a product PRODUCT_NAME, PRODUCT_NAME, and etc ). Then you should give the content like this :
 {
     "product":"PRODUCT_NAME"
 }
