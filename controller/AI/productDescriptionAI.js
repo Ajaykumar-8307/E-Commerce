@@ -6,7 +6,7 @@ const path = require("path");
 const prePrompt = fs.readFileSync(path.join(__dirname, "prompt.txt"), "utf-8");
 
 const ai = new GoogleGenAI({
-    apiKey: "AIzaSyDGRrjcQ2ORugqsIWIFIERV3biZkJ5t6m4", // Use env variable for security
+    apiKey: process.env.GOOGLE_API_KEY || "AIzaSyDGRrjcQ2ORugqsIWIFIERV3biZkJ5t6m4", // Use env variable for security
 });
 
 // Helper function: Markdown-like → HTML
@@ -26,15 +26,42 @@ function formatTextToHTML(text) {
     text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
     text = text.replace(/(^|\s)\*(.*?)\*(?=\s|$)/g, "$1<i>$2</i>");
 
-    // Handle lists
-    const listRegex = /^([\*\u2022]\s+.*(?:\n[\*\u2022]\s+.*)*)/gm;
-    text = text.replace(listRegex, (match) => {
-        const items = match.split("\n").map(line => line.replace(/^[\*\u2022]\s+/, ""));
-        return `<ul>${items.map(item => `<li>${item}</li>`).join("")}</ul>`;
-    });
+    // Handle lists (including indented lists)
+    // Match lines starting with optional spaces followed by * or • and text
+    const listItemRegex = /^\s*([\*\u2022])\s+(.*)$/gm;
+    let listItems = [];
+    let inList = false;
+    let output = [];
 
-    // Replace remaining newlines with <br>
-    text = text.replace(/\n/g, "<br>");
+    // Split text into lines and process each line
+    const lines = text.split("\n");
+    for (let line of lines) {
+        const listMatch = line.match(/^\s*([\*\u2022])\s+(.*)$/);
+        if (listMatch) {
+            // Start or continue a list
+            if (!inList) {
+                inList = true;
+                listItems = [];
+            }
+            listItems.push(`<li>${listMatch[2]}</li>`);
+        } else {
+            // End the list if we were in one
+            if (inList) {
+                output.push(`<ul>${listItems.join("")}</ul>`);
+                inList = false;
+                listItems = [];
+            }
+            output.push(line);
+        }
+    }
+
+    // Close any open list at the end
+    if (inList && listItems.length > 0) {
+        output.push(`<ul>${listItems.join("")}</ul>`);
+    }
+
+    // Join lines back and replace remaining newlines with <br>
+    text = output.join("\n").replace(/\n/g, "<br>");
 
     return text;
 }
