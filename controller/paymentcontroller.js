@@ -12,16 +12,21 @@ exports.Pay = async (req, res) => {
     const { product, email } = req.body;
 
     try {
-        // Validate input
-        if (!product?.name || !product?.price || !email) {
-            console.error('Invalid input:', { product, email });
-            return res.status(400).json({ message: 'Missing product name, price, or email' });
-        }
+        // Log incoming request for debugging
+        console.log('Received /pay/buynow request:', { product, email });
 
-        // Validate price
-        if (typeof product.price !== 'number' || product.price < 1) {
-            console.error('Invalid price:', product.price);
+        // Validate input
+        if (!product?.name || typeof product.name !== 'string' || product.name.trim() === '') {
+            console.error('Missing or invalid product name:', product?.name);
+            return res.status(400).json({ message: 'Missing or invalid product name' });
+        }
+        if (!product?.price || typeof product.price !== 'number' || product.price < 1) {
+            console.error('Missing or invalid product price:', product?.price);
             return res.status(400).json({ message: 'Product price must be a number and at least ₹1' });
+        }
+        if (!email || typeof email !== 'string' || email.trim() === '') {
+            console.error('Missing or invalid email:', email);
+            return res.status(400).json({ message: 'Missing or invalid email' });
         }
 
         // Find user
@@ -48,7 +53,7 @@ exports.Pay = async (req, res) => {
 
         console.log('Razorpay order created:', order);
 
-        // Send email (handle potential errors separately)
+        // Send email (handle errors separately)
         try {
             await PaymentSuccess(email, user.name, product.name, product.price);
             console.log('PaymentSuccess email sent for:', email);
@@ -84,6 +89,9 @@ exports.Pay = async (req, res) => {
 exports.verifyPayment = async (req, res) => {
     try {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+        // Log verification request
+        console.log('Received /pay/verify request:', req.body);
 
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
             console.error('Missing payment verification details:', req.body);
