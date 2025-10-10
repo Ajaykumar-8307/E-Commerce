@@ -41,7 +41,7 @@ function formatTextToHTML(text) {
 
 exports.generateDescription = async (req, res) => {
     try {
-        const { prompt, conversation, name, cato } = req.body;
+        const { prompt, conversation, name, cato, tag } = req.body;
 
         if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
             return res.status(400).json({ error: "Invalid or missing prompt" });
@@ -54,7 +54,7 @@ exports.generateDescription = async (req, res) => {
                 role: "user", // ignore assistant role completely
                 parts: msg.content
             })),
-            { role: "user", parts: [{ text: `${name}-This is the product name, ${prompt}-This is the product description, ${cato}-This is product Category` }] } // current prompt
+            { role: "user", parts: [{ text: `${name}-This is the product name, ${prompt}-This is the product description, ${cato}-This is product Category, ${tag}-This is Tag Name` }] } // current prompt
         ];
 
         const response = await ai.models.generateContent({
