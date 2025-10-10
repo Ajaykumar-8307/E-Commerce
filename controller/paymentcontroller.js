@@ -4,8 +4,8 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 
 const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_YOUR_RAZORPAY_KEY_ID',
-    key_secret: process.env.RAZORPAY_KEY_SECRET || 'YOUR_RAZORPAY_KEY_SECRET'
+    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_RRiSSksVIhxJRm',
+    key_secret: process.env.RAZORPAY_KEY_SECRET || 'VkwvNvJ1V3HgFAgHZ5gq8Y44'
 });
 
 exports.Pay = async (req, res) => {
@@ -60,7 +60,7 @@ exports.Pay = async (req, res) => {
         return res.status(200).json({
             message: 'Order Created Successfully',
             order_id: order.id,
-            key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_YOUR_RAZORPAY_KEY_ID',
+            key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_RRiSSksVIhxJRm',
             product_name: product.name,
             amount: product.price,
             currency: 'INR',
@@ -92,7 +92,7 @@ exports.verifyPayment = async (req, res) => {
 
         const body = razorpay_order_id + '|' + razorpay_payment_id;
         const expectedSignature = crypto
-            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'YOUR_RAZORPAY_KEY_SECRET')
+            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'VkwvNvJ1V3HgFAgHZ5gq8Y44')
             .update(body.toString())
             .digest('hex');
 
