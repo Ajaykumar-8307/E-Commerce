@@ -53,7 +53,7 @@ export class AddProducts implements OnInit {
   }
 
   aigenerateDescription() {
-    this.http.post(`${this.API_Link}/gemini/product-description`, {
+    this.http.post(`http://localhost:3000/api/v1/gemini/product-description`, {
       prompt: this.product.description,
       name: this.product.name,
       cato: this.product.category

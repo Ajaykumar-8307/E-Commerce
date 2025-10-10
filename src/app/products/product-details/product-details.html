@@ -2,14 +2,14 @@
 <main class="container">
   <section class="product-card">
     <div class="date-time">
-      {{product.createdAt}}
+      {{ product.createdAt | date:'medium' }}
     </div>
 
     <div class="product-details">
       <div class="image-section">
         <img class="product-image"
-          [src]="product.image"
-          alt="Gaming Console" />
+             [src]="product.image || 'assets/placeholder-image.jpg'"
+             [alt]="'Image of ' + (product.name || 'product')" />
         <div class="image-overlay">
           <span class="active"></span>
           <span></span>
@@ -18,28 +18,28 @@
       </div>
 
       <div class="info-section">
-        <h1>{{product.name}}</h1>
-        <p class="price">₹ {{product.price}}</p>
-        <p class="stock in-stock">In Stock: {{product.stocks}}</p>
+        <h1>{{ product.name || 'Product Name' }}</h1>
+        <p class="price">₹ {{ product.price || '0' }}</p>
+        <p class="stock in-stock">In Stock: {{ product.stocks || '0' }}</p>
 
         <div class="action-buttons">
-          <button class="buy-now-btn" (click)="buyProduct()">
-            <i class="fa fa-credit-card" style="color: white; margin-right: 10px;"></i>
-            Buy It Now
+          <button class="buy-now-btn" (click)="buyProduct()" [disabled]="isLoading">
+            <i class="fa fa-credit-card" aria-hidden="true" style="color: white; margin-right: 10px;"></i>
+            {{ isLoading ? 'Processing...' : 'Buy It Now' }}
           </button>
-          <button class="add-to-cart-btn" (click)="addToCart(product._id)">
-            <i class="fa fa-cart-plus" style="color: white; margin-right: 10px;"></i>
+          <button class="add-to-cart-btn" (click)="addToCart(product._id)" [disabled]="isLoading">
+            <i class="fa fa-cart-plus" aria-hidden="true" style="color: white; margin-right: 10px;"></i>
             Add to Cart
           </button>
         </div>
 
         <div class="details-list">
-          <p><span class="label">Seller Name :</span> {{admin.name}}</p>
-          <p><span class="label">Category :</span> {{product.category}}</p>
-          <p><span class="label">Location :</span> {{product.location}}</p>
+          <p><span class="label">Seller Name :</span> {{ admin.name || 'Unknown' }}</p>
+          <p><span class="label">Category :</span> {{ product.category || 'N/A' }}</p>
+          <p><span class="label">Location :</span> {{ product.location || 'N/A' }}</p>
           <p>
             <span class="label">3D Model :</span>
-            <button class="view-3d-btn">View in 3D</button>
+            <button class="view-3d-btn" (click)="view3DModel()" [disabled]="!product.has3DModel">View in 3D</button>
           </p>
         </div>
       </div>
