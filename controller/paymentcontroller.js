@@ -65,7 +65,7 @@ exports.Pay = async (req, res) => {
         return res.status(200).json({
             message: 'Order Created Successfully',
             order_id: order.id,
-            key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_RRiSSksVIhxJRm',
+            key_id: "rzp_test_RRiSSksVIhxJRm",
             product_name: product.name,
             amount: product.price,
             currency: 'INR',
@@ -100,7 +100,7 @@ exports.verifyPayment = async (req, res) => {
 
         const body = razorpay_order_id + '|' + razorpay_payment_id;
         const expectedSignature = crypto
-            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'VkwvNvJ1V3HgFAgHZ5gq8Y44')
+            .createHmac('sha256', "VkwvNvJ1V3HgFAgHZ5gq8Y44")
             .update(body.toString())
             .digest('hex');
 
