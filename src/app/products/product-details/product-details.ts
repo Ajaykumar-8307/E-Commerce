@@ -43,9 +43,20 @@ export class ProductDetails implements OnInit {
           const decodedToken: any = jwtDecode(token);
           this.user = decodedToken;
           console.log('Decoded user:', this.user);
+          if (!this.user.email) {
+            console.error('No email in token:', decodedToken);
+            alert('User email not found. Please log in again.');
+            this.router.navigate(['/login']);
+          }
         } catch (error) {
           console.error('Error decoding token:', error);
+          alert('Invalid token. Please log in again.');
+          this.router.navigate(['/login']);
         }
+      } else {
+        console.error('No token found in localStorage');
+        alert('Please log in to view product details.');
+        this.router.navigate(['/login']);
       }
       this.loadRazorpayScript();
     }
@@ -53,6 +64,11 @@ export class ProductDetails implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.id = params['id'];
       console.log('Product ID from query params:', this.id);
+      if (!this.id) {
+        console.error('No product ID provided in query params');
+        alert('Invalid product ID.');
+        this.router.navigate(['/']);
+      }
     });
 
     this.isLoading = true;
@@ -60,7 +76,12 @@ export class ProductDetails implements OnInit {
       next: (res: any) => {
         this.product = res.product || {};
         this.admin = res.admin || {};
-        console.log('Product details loaded:', this.product);
+        console.log('Product details response:', res);
+        if (!this.product.name || !this.product.price || typeof this.product.price !== 'number') {
+          console.error('Product missing name or valid price:', this.product);
+          alert('Product details are incomplete. Please try another product.');
+          this.router.navigate(['/']);
+        }
         this.isLoading = false;
         this.cd.detectChanges();
       },
@@ -68,6 +89,7 @@ export class ProductDetails implements OnInit {
         console.error('Error loading product details:', err);
         this.isLoading = false;
         alert('Error loading product details');
+        this.router.navigate(['/']);
         this.cd.detectChanges();
       }
     });
@@ -110,12 +132,15 @@ export class ProductDetails implements OnInit {
       return;
     }
     if (!this.user?.email) {
+      console.error('No user email available:', this.user);
       alert('Please log in to proceed with payment.');
       this.router.navigate(['/login']);
       return;
     }
-    if (!this.product?._id || !this.product?.name || !this.product?.price) {
-      alert('Invalid product details.');
+    if (!this.product?._id || !this.product?.name || !this.product?.price || typeof this.product.price !== 'number') {
+      console.error('Invalid product details:', this.product);
+      alert('Invalid product details. Please try another product.');
+      this.router.navigate(['/']);
       return;
     }
 
@@ -128,12 +153,16 @@ export class ProductDetails implements OnInit {
         throw new Error('Razorpay checkout script failed to load. Check network or ad-blockers.');
       }
 
-      console.log('Sending to /pay/buynow:', { product: this.product, email: this.user.email });
+      const payload = {
+        product: {
+          name: this.product.name,
+          price: this.product.price
+        },
+        email: this.user.email
+      };
+      console.log('Sending to /pay/buynow:', payload);
       const res = await lastValueFrom(
-        this.http.post<any>(`${this.API_Link}/pay/buynow`, {
-          product: this.product,
-          email: this.user.email
-        })
+        this.http.post<any>(`${this.API_Link}/pay/buynow`, payload)
       );
 
       if (!res?.order_id || !res?.key_id || !res?.amount) {
@@ -214,6 +243,7 @@ export class ProductDetails implements OnInit {
 
   addToCart(productId = this.product._id, quantity: Number = 1) {
     if (!this.user?.id) {
+      console.error('No user ID available:', this.user);
       alert('Please log in to add items to the cart.');
       this.router.navigate(['/login']);
       return;
