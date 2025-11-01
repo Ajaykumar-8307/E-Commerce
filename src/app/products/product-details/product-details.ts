@@ -13,6 +13,7 @@ import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
+  standalone: true,
   imports: [Navbar, CommonModule, FormsModule, HttpClientModule],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
@@ -42,56 +43,52 @@ export class ProductDetails implements OnInit {
         try {
           const decodedToken: any = jwtDecode(token);
           this.user = decodedToken;
-          console.log('Decoded user:', this.user);
           if (!this.user.email) {
-            console.error('No email in token:', decodedToken);
             alert('User email not found. Please log in again.');
             this.router.navigate(['/login']);
           }
         } catch (error) {
-          console.error('Error decoding token:', error);
           alert('Invalid token. Please log in again.');
           this.router.navigate(['/login']);
         }
       } else {
-        console.error('No token found in localStorage');
         alert('Please log in to view product details.');
         this.router.navigate(['/login']);
       }
+
       this.loadRazorpayScript();
     }
 
     this.route.queryParams.subscribe((params) => {
       this.id = params['id'];
-      console.log('Product ID from query params:', this.id);
       if (!this.id) {
-        console.error('No product ID provided in query params');
         alert('Invalid product ID.');
         this.router.navigate(['/']);
+        return;
       }
-    });
 
-    this.isLoading = true;
-    this.http.get<any>(`${this.API_Link}/product/pro-details`, { params: { id: this.id } }).subscribe({
-      next: (res: any) => {
-        this.product = res.product || {};
-        this.admin = res.admin || {};
-        console.log('Product details response:', res);
-        if (!this.product.name || !this.product.price || typeof this.product.price !== 'number') {
-          console.error('Product missing name or valid price:', this.product);
-          alert('Product details are incomplete. Please try another product.');
+      // ✅ Fetch product only after ID is confirmed
+      this.isLoading = true;
+      this.http.get<any>(`${this.API_Link}/product/pro-details`, { params: { id: this.id } }).subscribe({
+        next: (res: any) => {
+          this.product = res.product || {};
+          this.admin = res.admin || {};
+          if (!this.product.name || typeof this.product.price !== 'number') {
+            alert('Product details are incomplete. Please try another product.');
+            this.router.navigate(['/']);
+            return;
+          }
+          this.isLoading = false;
+          this.cd.detectChanges();
+        },
+        error: (err: any) => {
+          console.error('Error loading product details:', err);
+          this.isLoading = false;
+          alert('Error loading product details');
           this.router.navigate(['/']);
+          this.cd.detectChanges();
         }
-        this.isLoading = false;
-        this.cd.detectChanges();
-      },
-      error: (err: any) => {
-        console.error('Error loading product details:', err);
-        this.isLoading = false;
-        alert('Error loading product details');
-        this.router.navigate(['/']);
-        this.cd.detectChanges();
-      }
+      });
     });
   }
 
@@ -102,7 +99,6 @@ export class ProductDetails implements OnInit {
         return;
       }
       if ((window as any).Razorpay) {
-        console.log('Razorpay script already loaded');
         resolve(true);
         return;
       }
@@ -110,14 +106,8 @@ export class ProductDetails implements OnInit {
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
       script.async = true;
-      script.onload = () => {
-        console.log('Razorpay script loaded successfully');
-        resolve(true);
-      };
-      script.onerror = () => {
-        console.error('Failed to load Razorpay script');
-        resolve(false);
-      };
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
   }
@@ -127,20 +117,16 @@ export class ProductDetails implements OnInit {
   }
 
   async buyProduct() {
-    if (!isPlatformBrowser(this.platformId)) {
-      console.warn('Payment cannot be initiated on the server side.');
-      return;
-    }
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (!this.user?.email) {
-      console.error('No user email available:', this.user);
       alert('Please log in to proceed with payment.');
       this.router.navigate(['/login']);
       return;
     }
-    if (!this.product?._id || !this.product?.name || !this.product?.price || typeof this.product.price !== 'number') {
-      console.error('Invalid product details:', this.product);
-      alert('Invalid product details. Please try another product.');
-      this.router.navigate(['/']);
+
+    if (!this.product?.name || typeof this.product?.price !== 'number') {
+      alert('Product not fully loaded yet. Please wait.');
       return;
     }
 
@@ -150,7 +136,7 @@ export class ProductDetails implements OnInit {
     try {
       const scriptLoaded = await this.loadRazorpayScript();
       if (!scriptLoaded || !(window as any).Razorpay) {
-        throw new Error('Razorpay checkout script failed to load. Check network or ad-blockers.');
+        throw new Error('Failed to load Razorpay script');
       }
 
       const payload = {
@@ -160,16 +146,16 @@ export class ProductDetails implements OnInit {
         },
         email: this.user.email
       };
-      console.log('Sending to /pay/buynow:', payload);
+
+      console.log('Sending payload to /pay/buynow:', payload);
+
       const res = await lastValueFrom(
         this.http.post<any>(`${this.API_Link}/pay/buynow`, payload)
       );
 
       if (!res?.order_id || !res?.key_id || !res?.amount) {
-        throw new Error('Invalid order response from server: ' + JSON.stringify(res));
+        throw new Error('Invalid Razorpay order response');
       }
-
-      console.log('Razorpay order response:', res);
 
       const options = {
         key: res.key_id,
@@ -179,7 +165,7 @@ export class ProductDetails implements OnInit {
         description: `Purchase of ${res.product_name || this.product.name}`,
         order_id: res.order_id,
         handler: (response: any) => {
-          console.log('Payment success response:', response);
+          console.log('Payment successful:', response);
           this.verifyPayment(response);
         },
         prefill: {
@@ -187,12 +173,9 @@ export class ProductDetails implements OnInit {
           email: res.email || this.user.email,
           contact: res.contact || this.user.contact || ''
         },
-        theme: {
-          color: '#3399cc'
-        },
+        theme: { color: '#3399cc' },
         modal: {
           ondismiss: () => {
-            console.log('Razorpay modal dismissed');
             this.isLoading = false;
             this.router.navigate(['/cancel']);
             this.cd.detectChanges();
@@ -211,8 +194,8 @@ export class ProductDetails implements OnInit {
       });
       rzp.open();
     } catch (error: any) {
-      console.error('Error initiating Razorpay:', error);
-      alert(`Payment error: ${error.message || 'Failed to create order. Check console.'}`);
+      console.error('Error in Razorpay:', error);
+      alert(`Payment error: ${error.message}`);
       this.isLoading = false;
       this.cd.detectChanges();
     }
@@ -225,14 +208,15 @@ export class ProductDetails implements OnInit {
       razorpay_payment_id: response.razorpay_payment_id,
       razorpay_signature: response.razorpay_signature
     }).subscribe({
-      next: (verifyRes: any) => {
+      next: (res: any) => {
         this.isLoading = false;
-        alert(verifyRes.message);
+        alert(res.message || 'Payment successful!');
         this.router.navigate(['/success']);
         this.cd.detectChanges();
       },
       error: (err: any) => {
-        console.error('Payment verification error:', err);
+        console.error('Verification failed:', err);
+        console.log('Payment response for debugging:', response);
         this.isLoading = false;
         alert('Payment verification failed');
         this.router.navigate(['/cancel']);
@@ -243,7 +227,6 @@ export class ProductDetails implements OnInit {
 
   addToCart(productId = this.product._id, quantity: Number = 1) {
     if (!this.user?.id) {
-      console.error('No user ID available:', this.user);
       alert('Please log in to add items to the cart.');
       this.router.navigate(['/login']);
       return;
@@ -257,13 +240,13 @@ export class ProductDetails implements OnInit {
     }).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        alert(`${res.message}`);
+        alert(res.message);
         this.cd.detectChanges();
       },
       error: (err: any) => {
         console.error('Add to cart error:', err);
         this.isLoading = false;
-        alert(`${err.error.message || 'Error adding to cart'}`);
+        alert(err.error.message || 'Error adding to cart');
         this.cd.detectChanges();
       }
     });
