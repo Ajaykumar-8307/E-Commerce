@@ -72,7 +72,7 @@ exports.resendOtp = async (req, res) => {
         await sendVerificationEmail(email, otp);
         return res.status(200).json({message: "OTP Resent Successfully!"});
     } catch (error) {
-        return res.status(500).json({message: "Error Resending OTP. Try Again Later."});
+        return res.status(500).json({message: "Error Resending OTP. Try Again Later.", error: error.message});
     }
 }
 
